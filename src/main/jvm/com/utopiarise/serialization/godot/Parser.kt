@@ -62,10 +62,7 @@ class Parser(private val tokens: List<Token>) {
     }
 
     private fun parseAssignement(token: IdentifierToken): Declaration {
-        return if (next is EqualToken) {
-            parseElement(token, next)
-        }
-        else TODO("Error not implemented")
+        return if (next is EqualToken) parseElement(token, next) else TODO("Error not implemented")
     }
 
     private fun parseDisctionnary(identifierToken: IdentifierToken?): Declaration {

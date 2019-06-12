@@ -15,6 +15,10 @@ data class TestItem(var id: Int,
                     var height: Int) {
     constructor(): this(-1, arrayOf(), -1, "", "", -1, -1, -1, -1)
 
+    override fun hashCode(): Int {
+        return id
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -22,12 +26,7 @@ data class TestItem(var id: Int,
         other as TestItem
 
         if (id != other.id) return false
-        if (!attributes.contentEquals(other.attributes)) return false
 
         return true
-    }
-
-    override fun hashCode(): Int {
-        return id
     }
 }
