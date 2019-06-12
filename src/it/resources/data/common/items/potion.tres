@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://main/models/resources/item.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+id = 0
+attributes = [ 0, 6, 3 ]
+category = 1
+description = "Popo helps you to keep healthy !"
+item_name = "Potion"
+price = 300
+shop = 0
+width = 1
+height = 1
+

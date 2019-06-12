@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://data/common/items/potion.tres" type="Resource" id=1]
+[ext_resource path="res://main/models/resources/item_db.gd" type="Script" id=2]
+
+[resource]
+script = ExtResource( 2 )
+database = {
+0: ExtResource( 1 )
+}
+
