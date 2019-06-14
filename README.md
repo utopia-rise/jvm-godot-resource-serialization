@@ -24,7 +24,7 @@ you can do with json using Jackson.
 The only thing you have to is to insure your data models between Java/Kotlin and GDScript are the same.
 Let admit you have an Item Godot resource like this :
 
-```
+```gdscript
 extends Resource
 
 class_name Item
@@ -51,7 +51,7 @@ export(int) var height: int
 
 You should have the JVM equivalent :
 
-```
+```kotlin
 data class Item(var id: Int,
                     var attributes: Array<Int>,
                     var category: Int,
@@ -82,7 +82,7 @@ data class Item(var id: Int,
 
 If I have an ItemDatabase that refers to Item, you should have in GDScript:
 
-```
+```gdscript
 extends Resource
 
 class_name ItemDatabase
@@ -92,7 +92,7 @@ export(Dictionary) var database: Dictionary
 
 And on JVM side :
 
-```
+```kotlin
 data class ItemDB(var database: Map<Int, Item>) {
     constructor(): this(HashMap())
 }
@@ -108,12 +108,12 @@ To create a JVM ItemDB instance from [item_db.tres](src/it/resources/data/common
 `fromGodotResource` method, like this:
 
 - Kotlin :
-```
+```kotlin
 val itemDB = fromGodotResource<ItemDB>(file, resPathReplacement)
 ```
 
 - Java: 
-```
+```java
 ResourceDeserializerKt.fromGodotResource(ItemDB.class, file, resPathReplacement);
 ```
 
