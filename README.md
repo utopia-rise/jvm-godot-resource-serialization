@@ -8,15 +8,16 @@ It is written in Kotlin, and no Java source should go in it !
 This project is currently a work in progress, and only support deserialization. For now it does
 not support internal resources (it will be added).
 
-We thank Bob Nystrom for his book [crafting interpreters](https://craftinginterpreters.com/) has inspired our code.
+We thank Bob Nystrom for his book [crafting interpreters](https://craftinginterpreters.com/), which has inspired our code.
 
 ## Project's goal
 
-If you are a java user and a Godot game developer, this project might feat some of your needs.  
+If you are a java user and a Godot game developer, this project might feet some of your needs.  
 Imagine you build a game with godot, with some static data, registered as Godot resource (tres). On an other side, you
 have a java application (multi-player server, spring rest service, ...) and want this java application to use those
 resource as JVM objects. This project is made for you !  
-It provide a deserializer for godot resource data format, using reflexion to inject data into your class.
+It provide a deserializer for godot resource data format, using reflexion to inject data into your class instance, like
+you can do with json using Jackson.
 
 ## Usage
 
