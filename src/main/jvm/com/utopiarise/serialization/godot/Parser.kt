@@ -48,16 +48,16 @@ class Parser(private val tokens: List<Token>) {
     }
 
     private fun parseInnerAssignement(): Array<Declaration> {
-        var innerToken = next
+        next
         val declarationParameters = ArrayList<Declaration>()
-        if (innerToken is IdentifierToken) {
-            while (innerToken is IdentifierToken) {
-                declarationParameters.add(parseAssignement(innerToken))
-                innerToken = next
+        if (peek is IdentifierToken) {
+            while (peek is IdentifierToken) {
+                declarationParameters.add(parseAssignement(peek as IdentifierToken))
+                next
             }
         }
         else TODO("Error not implemented")
-        if (innerToken !is RightBracketToken) TODO("Error not implemented")
+        if (peek !is RightBracketToken) TODO("Error not implemented")
         return declarationParameters.toTypedArray()
     }
 
