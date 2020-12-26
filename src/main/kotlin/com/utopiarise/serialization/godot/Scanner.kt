@@ -45,14 +45,13 @@ class Scanner(private val source: String) {
             // Unterminated string.
             if (isAtEnd) {
                 TODO("Error not implemented")
-                return null
             }
             advance
             return StringToken(source.substring(start, current), source.substring(start + 1, current - 1), line)
         }
     private val token: Token?
         get() {
-            return when(val c = advance) {
+            return when (val c = advance) {
                 '(' -> LeftParenthesisToken(source.substring(start, current), null, line)
                 ')' -> RightParenthesisToken(source.substring(start, current), null, line)
                 '{' -> LeftBraceToken(source.substring(start, current), null, line)
@@ -96,5 +95,5 @@ class Scanner(private val source: String) {
     private fun Char.isDigit() = this in '0'..'9'
     private fun Char.isAlpha() = this in 'a'..'z' || this in 'A'..'Z' || this == '_'
     private fun Char.isAlphaNumeric() = this.isDigit() || this.isAlpha()
-    private infix fun ArrayList<Token>.add(token: Token?)= if (token == null) false else this.add(token)
+    private infix fun ArrayList<Token>.add(token: Token?) = if (token == null) false else this.add(token)
 }

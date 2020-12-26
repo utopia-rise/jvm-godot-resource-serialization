@@ -5,7 +5,7 @@ import java.io.File
 internal val pathMap = HashMap<String, Any>()
 
 inline fun <reified T> fromGodotResource(resourcePath: String, resPathReplacement: String) =
-        getOrPutResourceFromMap(resourcePath, ResourceDeserializer(T::class.java, resPathReplacement) deserialize File(resourcePath)) as T
+    getOrPutResourceFromMap(resourcePath, ResourceDeserializer(T::class.java, resPathReplacement) deserialize File(resourcePath)) as T
 
 fun <T> fromGodotResource(type: Class<T>, resourcePath: String, resPathReplacement: String): T {
     val resource = ResourceDeserializer(type, resPathReplacement) deserialize File(resourcePath)

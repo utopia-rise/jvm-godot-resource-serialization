@@ -18,19 +18,19 @@ class Parser(private val tokens: List<Token>) {
 
     private val declaration: Declaration
         get() {
-            return when(val token = peek) {
+            return when (val token = peek) {
                 is ScriptToken -> {
                     if (next is EqualToken && next is CallExtResourceToken)
-                        /* Encapsulate ExternalResource declaration in script declaration as script will be ignored,
-                        * thus this external resource will be ignored too */
+                    /* Encapsulate ExternalResource declaration in script declaration as script will be ignored,
+                    * thus this external resource will be ignored too */
                         ScriptDeclaration(token, parseCallToExternalResource(token)) else TODO("Error not implemented")
                 }
-                is IdentifierToken -> parseAssignement(token)
+                is IdentifierToken -> parseAssignment(token)
                 is LeftBracketToken -> {
-                    when(next) {
+                    when (next) {
                         is ResourceToken -> if (next is RightBracketToken) ResourceDeclaration() else TODO("Error not implemented")
-                        is GdResourceToken -> GdResourceDeclaration(*parseInnerAssignement())
-                        is ExtResourceToken -> ExternalResourceDeclaration(*parseInnerAssignement())
+                        is GdResourceToken -> GdResourceDeclaration(*parseInnerAssignment())
+                        is ExtResourceToken -> ExternalResourceDeclaration(*parseInnerAssignment())
                         else -> TODO("Error not implemented")
                     }
                 }
@@ -47,37 +47,35 @@ class Parser(private val tokens: List<Token>) {
         return declarations
     }
 
-    private fun parseInnerAssignement(): Array<Declaration> {
+    private fun parseInnerAssignment(): Array<Declaration> {
         next
         val declarationParameters = ArrayList<Declaration>()
         if (peek is IdentifierToken) {
             while (peek is IdentifierToken) {
-                declarationParameters.add(parseAssignement(peek as IdentifierToken))
+                declarationParameters.add(parseAssignment(peek as IdentifierToken))
                 next
             }
-        }
-        else TODO("Error not implemented")
+        } else TODO("Error not implemented")
         if (peek !is RightBracketToken) TODO("Error not implemented")
         return declarationParameters.toTypedArray()
     }
 
-    private fun parseAssignement(token: IdentifierToken): Declaration {
+    private fun parseAssignment(token: IdentifierToken): Declaration {
         return if (next is EqualToken) parseElement(token, next) else TODO("Error not implemented")
     }
 
-    private fun parseDisctionnary(identifierToken: IdentifierToken?): Declaration {
-        return DictionaryDeclaration(identifierToken, *parseDictionnaryElement(next).toList().toTypedArray())
+    private fun parseDictionary(identifierToken: IdentifierToken?): Declaration {
+        return DictionaryDeclaration(identifierToken, *parseDictionaryElement(next).toList().toTypedArray())
     }
 
     private fun parseCallToExternalResource(token: IdentifierToken?): CallExternalResourceDeclaration {
         if (next is LeftParenthesisToken) {
             val idParameterToken = next
             val idParameterValue = if (idParameterToken is NumberToken) (idParameterToken.literal
-                    as Double).toInt() else TODO("Error not implemented")
+                as Double).toInt() else TODO("Error not implemented")
             if (next !is RightParenthesisToken) TODO("Error not implemented")
             return CallExternalResourceDeclaration(token, idParameterValue)
-        }
-        else TODO("Error not implemented")
+        } else TODO("Error not implemented")
     }
 
     private fun parseArray(token: IdentifierToken?) = ArrayDeclaration(token, *parseArrayElement(next).toTypedArray())
@@ -91,26 +89,26 @@ class Parser(private val tokens: List<Token>) {
         return arrayValues
     }
 
-    private fun parseDictionnaryElement(elementToken: Token): Map<Declaration, Declaration> {
+    private fun parseDictionaryElement(elementToken: Token): Map<Declaration, Declaration> {
         val map = HashMap<Declaration, Declaration>()
         val keyDeclaration = parseElement(null, elementToken)
         if (next !is SemiCollonToken) TODO("Error not implemented")
         val valueDeclaration = parseElement(null, next)
         map[keyDeclaration] = valueDeclaration
         val token = next
-        if (token !is RightBraceToken) map.putAll(parseDictionnaryElement(token))
+        if (token !is RightBraceToken) map.putAll(parseDictionaryElement(token))
         else next
         return map
     }
 
     private fun parseElement(identifierToken: IdentifierToken?, elementToken: Token): Declaration {
-        return when(elementToken) {
+        return when (elementToken) {
             is NumberToken -> NumberDeclaration(identifierToken, elementToken.literal as Double)
             is StringToken -> StringDeclaration(identifierToken, elementToken.literal as String)
             is BooleanToken -> BooleanDeclaration(identifierToken, elementToken.literal as Boolean)
             is CallExtResourceToken -> parseCallToExternalResource(identifierToken)
             is LeftBracketToken -> parseArray(identifierToken)
-            is LeftBraceToken -> parseDisctionnary(identifierToken)
+            is LeftBraceToken -> parseDictionary(identifierToken)
             else -> TODO("Error not implemented")
         }
     }
