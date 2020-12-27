@@ -1,8 +1,4 @@
-package com.utopiarise.serialization.godot
-
-data class TestItemDB(var database: Map<Int, TestItem>) {
-    constructor() : this(HashMap())
-}
+package com.utopiarise.serialization.godot.model
 
 data class TestItem(
     var id: Int,

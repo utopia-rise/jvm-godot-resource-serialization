@@ -1,4 +1,4 @@
-package com.utopiarise.serialization.godot
+package com.utopiarise.serialization.godot.core
 
 sealed class Declaration(val identifierToken: IdentifierToken?, vararg val values: Any)
 
@@ -22,10 +22,16 @@ class BooleanDeclaration(token: IdentifierToken?, value: Boolean) : Declaration(
 class ArrayDeclaration(token: IdentifierToken?, vararg values: Declaration) : Declaration(token, *values)
 class DictionaryDeclaration(token: IdentifierToken?, vararg values: Pair<Declaration, Declaration>) : Declaration(token, *values)
 
-class ResourceDeclaration : Declaration(null)
-class GdResourceDeclaration(vararg values: Declaration) : Declaration(null, *values)
-class ExternalResourceDeclaration(vararg values: Declaration) : Declaration(null, *values)
+class ResourceDeclaration : Declaration(null), StandaloneDeclaration
+class GdResourceDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
+class GdSceneDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
+class ExternalResourceDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
+class NodeDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
+class SignalConnectionDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 
 class CallExternalResourceDeclaration(token: IdentifierToken?, id: Int) : Declaration(token, id)
 
 class ScriptDeclaration(token: ScriptToken, callExternalResourceDeclaration: CallExternalResourceDeclaration) : Declaration(token, callExternalResourceDeclaration)
+
+
+interface StandaloneDeclaration

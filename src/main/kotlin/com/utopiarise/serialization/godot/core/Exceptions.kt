@@ -1,4 +1,4 @@
-package com.utopiarise.serialization.godot
+package com.utopiarise.serialization.godot.core
 
 class UnknownKeywordException(message: String) : RuntimeException(message)
 class SyntaxException(message: String) : RuntimeException(message)

@@ -1,5 +1,6 @@
-package com.utopiarise.serialization.godot
+package com.utopiarise.serialization.godot.resource
 
+import com.utopiarise.serialization.godot.core.*
 import java.io.File
 import java.lang.reflect.*
 import java.lang.reflect.Array
@@ -22,15 +23,17 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
             if (it is ExternalResourceDeclaration) {
                 externalResource(it)
             } else {
-                val triple = it getReflectionValue null
-                if (triple != null) clazz.getDeclaredMethod("set${triple.first?.capitalize()}", triple.third)
-                    .invoke(instance, triple.second)
+                val triple = it.getReflectionValue(null)
+                val setterName = "set${triple?.first?.capitalize()}"
+                if (triple != null && clazz.methods.map { method -> method.name }.contains(setterName)) {
+                    clazz.getDeclaredMethod(setterName, triple.third).invoke(instance, triple.second)
+                }
             }
         }
         return instance
     }
 
-    private infix fun Declaration.getReflectionValue(type: Class<*>?): Triple<String?, Any, Class<*>>? {
+    private fun Declaration.getReflectionValue(type: Class<*>?): Triple<String?, Any, Class<*>>? {
         return when (this) {
             is DictionaryDeclaration -> value(this, type) { t, f ->
                 if (Map::class.java.isAssignableFrom(t) && f != null) {
@@ -40,8 +43,8 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                     else t.getConstructor().newInstance() as Map<*, *>).toMutableMap()
                     this.values.forEach {
                         it as Pair<Declaration, Declaration>
-                        val keyTriple = it.first getReflectionValue getClass(keyType)
-                        val valueTriple = it.second getReflectionValue getClass(valueType)
+                        val keyTriple = it.first.getReflectionValue(getClass(keyType))
+                        val valueTriple = it.second.getReflectionValue(getClass(valueType))
                         map[keyTriple?.second] = valueTriple?.second
                     }
                     map
@@ -51,7 +54,7 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                 if (t.isArray) {
                     val array = Array.newInstance(t.componentType, this.values.size)
                     for (i in this.values.indices) {
-                        val triple = this.values[i] as Declaration getReflectionValue t.componentType
+                        val triple = (this.values[i] as Declaration).getReflectionValue(t.componentType)
                         if (triple != null) {
                             Array.set(array, i, triple.second)
                         }
@@ -63,7 +66,7 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                 val resPath = resourceMap[this.values[0] as Int]
                 if (resPath != null) {
                     val extResPath = resPath.replace("res://", resPathReplacement)
-                    getOrPutResourceFromMap(resPath, ResourceDeserializer(t, resPathReplacement) deserialize File(extResPath))
+                    getOrPutResourceFromMap(resPath, ResourceDeserializer(t, resPathReplacement).deserialize(File(extResPath)))
                 } else TODO("Error not implemented")
             }
             is NumberDeclaration -> value(this, type) { t, _ -> this getValueToType t }

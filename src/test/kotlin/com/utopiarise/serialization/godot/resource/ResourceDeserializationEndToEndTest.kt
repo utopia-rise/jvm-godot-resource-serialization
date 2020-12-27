@@ -1,17 +1,19 @@
-package com.utopiarise.serialization.godot
+package com.utopiarise.serialization.godot.resource
 
+import com.utopiarise.serialization.godot.model.TestItemDB
+import com.utopiarise.serialization.godot.util.getResourceUrl
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 
-class DeserializationEndToEnd {
+class ResourceDeserializationEndToEndTest {
 
     @Test
     fun endToEnd() {
         val itemDB = fromGodotResource<TestItemDB>(
-            javaClass.classLoader.getResource("data/common/item_db.tres").file,
-            javaClass.classLoader.getResource("data").path.removeSuffix("data")
+            getResourceUrl("data/common/item_db.tres").file,
+            getResourceUrl("data").path.removeSuffix("data")
         )
         assertEquals(1, itemDB.database.size)
         assertTrue(itemDB.database[0]?.item_name == "Potion")

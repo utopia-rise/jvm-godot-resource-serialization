@@ -1,4 +1,4 @@
-package com.utopiarise.serialization.godot
+package com.utopiarise.serialization.godot.core
 
 class Scanner(private val source: String) {
 
@@ -35,7 +35,7 @@ class Scanner(private val source: String) {
             }
             return NumberToken(source.substring(start, current), source.substring(start, current).toDouble(), line)
         }
-    private val string: Token?
+    private val string: Token
         get() {
             while (peek != '"' && !isAtEnd) {
                 if (peek == '\n') line++
@@ -60,7 +60,7 @@ class Scanner(private val source: String) {
                 ']' -> RightBracketToken(source.substring(start, current), null, line)
                 ',' -> CommaToken(source.substring(start, current), null, line)
                 '=' -> EqualToken(source.substring(start, current), null, line)
-                ':' -> SemiCollonToken(source.substring(start, current), null, line)
+                ':' -> SemiColonToken(source.substring(start, current), null, line)
 
                 //Spaces are ignored
                 ' ' -> null
