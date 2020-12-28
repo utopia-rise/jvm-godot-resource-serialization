@@ -41,7 +41,7 @@ class TokenizerTest {
     fun `resource item_db contains 6 tokens when parsed`() = assertEquals(6, resourceDeclarations.size)
 
     @Test
-    fun `scene TestScene contains 9 tokens when parsed`() = assertEquals(9, sceneDeclarations.size)
+    fun `scene TestScene contains 16 tokens when parsed`() = assertEquals(16, sceneDeclarations.size)
 
     @Test
     fun `scene TestScene has 1 GdScene when parsed`() = assertEquals(1, sceneDeclarations.filterIsInstance<GdSceneDeclaration>().size)
@@ -50,7 +50,7 @@ class TokenizerTest {
     fun `scene TestScene has 2 ExtResources when parsed`() = assertEquals(2, sceneDeclarations.filterIsInstance<ExternalResourceDeclaration>().size)
 
     @Test
-    fun `scene TestScene has 2 Nodes when parsed`() = assertEquals(2, sceneDeclarations.filterIsInstance<NodeDeclaration>().size)
+    fun `scene TestScene has 9 Nodes when parsed`() = assertEquals(9, sceneDeclarations.filterIsInstance<NodeDeclaration>().size)
 
     @Test
     fun `scene TestScene has 2 Signals when parsed`() = assertEquals(2, sceneDeclarations.filterIsInstance<SignalConnectionDeclaration>().size)
