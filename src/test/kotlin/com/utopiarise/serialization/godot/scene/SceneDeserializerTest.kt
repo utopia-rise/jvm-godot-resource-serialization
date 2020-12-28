@@ -8,7 +8,7 @@ class SceneDeserializerTest {
 
     @Test
     fun `scene TestScene deserialized`() {
-        val sceneModel = fromTscn(getResourceUrl("scenes/TestScene.tscn").file)
+        val sceneModel = sceneFromTscn(getResourceUrl("scenes/TestScene.tscn").file)
 
         assertEquals("load_steps is supposed to be 3", 3, sceneModel.loadSteps)
         assertEquals("format is supposed to be 2", 2, sceneModel.format)

@@ -8,8 +8,8 @@ import com.utopiarise.serialization.godot.model.SignalConnection
 import java.io.File
 
 
-fun fromTscn(tscnPath: String): SceneModel {
-    return SceneDeserializer().deserialize(File(tscnPath))
+fun sceneFromTscn(tscnFilePath: String): SceneModel {
+    return SceneDeserializer().deserialize(File(tscnFilePath))
 }
 
 @PublishedApi
