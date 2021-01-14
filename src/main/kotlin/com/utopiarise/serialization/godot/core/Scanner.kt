@@ -14,6 +14,8 @@ class Scanner(private val source: String) {
             current++
             return source[current - 1]
         }
+    private val previous: Char
+        get() = source[current -1]
     private val peek: Char
         get() = if (isAtEnd) '\u0000' else source[current]
     private val peekNext: Char
@@ -37,7 +39,7 @@ class Scanner(private val source: String) {
         }
     private val string: Token
         get() {
-            while (peek != '"' && !isAtEnd) {
+            while (!(peek == '"' && previous != '\\') && !isAtEnd) {
                 if (peek == '\n') line++
                 advance
             }
@@ -61,6 +63,7 @@ class Scanner(private val source: String) {
                 ',' -> CommaToken(source.substring(start, current), null, line)
                 '=' -> EqualToken(source.substring(start, current), null, line)
                 ':' -> SemiColonToken(source.substring(start, current), null, line)
+                '-' -> MinusToken(source.substring(start, current), null, line)
 
                 //Spaces are ignored
                 ' ' -> null
@@ -77,7 +80,10 @@ class Scanner(private val source: String) {
                     when {
                         c.isDigit() -> number
                         c.isAlpha() -> identifier
-                        else -> TODO("Error not implemented")
+                        else -> {
+                            val blubb = ""
+                            TODO("Error not implemented")
+                        }
                     }
                 }
             }

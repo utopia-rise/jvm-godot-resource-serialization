@@ -10,8 +10,8 @@ class NumberDeclaration(token: IdentifierToken?, value: Double) : Declaration(to
             Float::class.java -> (values[0] as Double).toFloat()
             Int::class.java -> (values[0] as Double).toInt()
             Integer::class.java -> (values[0] as Double).toInt()
-            Short::class.java -> (values[0] as Double).toShort()
-            Byte::class.java -> (values[0] as Double).toByte()
+            Short::class.java -> (values[0] as Double).toInt().toShort()
+            Byte::class.java -> (values[0] as Double).toInt().toByte()
             else -> TODO("Error not implemented")
         }
     }
@@ -26,12 +26,16 @@ class ResourceDeclaration : Declaration(null), StandaloneDeclaration
 class GdResourceDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 class GdSceneDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 class ExternalResourceDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
+class SubResourceDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 class NodeDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 class SignalConnectionDeclaration(vararg values: Declaration) : Declaration(null, *values), StandaloneDeclaration
 
-class CallExternalResourceDeclaration(token: IdentifierToken?, id: Int) : Declaration(token, id)
+abstract class CallToResourceDeclaration(identifierToken: IdentifierToken?, values: Any) : Declaration(identifierToken, values)
+class CallExternalResourceDeclaration(token: IdentifierToken?, id: Int) : CallToResourceDeclaration(token, id)
+class CallSubResourceDeclaration(token: IdentifierToken?, id: Int) : CallToResourceDeclaration(token, id)
 
-class ScriptDeclaration(token: ScriptToken, callExternalResourceDeclaration: CallExternalResourceDeclaration) : Declaration(token, callExternalResourceDeclaration)
+class ScriptDeclaration(token: ScriptToken, callToResourceDeclaration: CallToResourceDeclaration) : Declaration(token, callToResourceDeclaration)
 
+class ConstructorDeclaration(token: IdentifierToken?, className: String, vararg values: Any) : Declaration(token, className, *values)
 
 interface StandaloneDeclaration

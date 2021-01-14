@@ -7,6 +7,12 @@ import org.junit.Test
 class SceneDeserializerTest {
 
     @Test
+    fun `don't crash on unknown stuff`() {
+        val sceneModel = sceneFromTscn(getResourceUrl("scenes/SceneSerializationTestScene.tscn").file)
+        val blubb = ""
+    }
+
+    @Test
     fun `scene TestScene deserialized`() {
         val sceneModel = sceneFromTscn(getResourceUrl("scenes/TestScene.tscn").file)
 

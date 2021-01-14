@@ -8,11 +8,13 @@ class ResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, li
 class GdResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class GdSceneToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class ExtResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
+class SubResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class ConnectionToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class NodeToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 
 open class IdentifierToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class CallExtResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
+class CallSubResourceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 
 class ScriptToken(lexeme: String, literal: Any?, line: Int) : IdentifierToken(lexeme, literal, line)
 
@@ -25,6 +27,7 @@ class LeftBraceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, l
 class RightBraceToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class LeftParenthesisToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class RightParenthesisToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
+class MinusToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 
 class StringToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class NumberToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)

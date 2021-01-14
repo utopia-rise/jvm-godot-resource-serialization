@@ -87,7 +87,7 @@ internal class SceneDeserializer {
                     .map { scriptDeclaration ->
                         scriptDeclaration
                             .values
-                            .filterIsInstance<CallExternalResourceDeclaration>()
+                            .filterIsInstance<CallToResourceDeclaration>()
                             .first()
                             .values
                             .first()

@@ -13,11 +13,17 @@ enum class Keywords(private val text: String) {
     EXT_RESOURCE("ext_resource") {
         override fun token(text: String, line: Int): Token = ExtResourceToken(text, null, line)
     },
+    SUB_RESOURCE("sub_resource") {
+        override fun token(text: String, line: Int): Token = SubResourceToken(text, null, line)
+    },
     CONNECTION("connection") {
         override fun token(text: String, line: Int): Token = ConnectionToken(text, null, line)
     },
     EXTRESOURCE("ExtResource") {
         override fun token(text: String, line: Int): Token = CallExtResourceToken(text, null, line)
+    },
+    SUBRESOURCE("SubResource") {
+        override fun token(text: String, line: Int): Token = CallSubResourceToken(text, null, line)
     },
     NODE("node") {
         override fun token(text: String, line: Int): Token = NodeToken(text, null, line)

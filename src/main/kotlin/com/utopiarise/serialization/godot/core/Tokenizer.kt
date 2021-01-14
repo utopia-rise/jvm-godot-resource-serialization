@@ -9,6 +9,18 @@ class Tokenizer(private val sourceAsText: String) {
 
     private val peek: Token
         get() = tokens[current]
+    private val peekNext: Token
+        get() {
+            return if (!isAtEnd) {
+                tokens[current + 1]
+            } else peek
+        }
+    private val peekPrevious: Token
+        get() {
+            return if (current != 0) {
+                tokens[current - 1]
+            } else peek
+        }
     private val isAtEnd: Boolean
         get() = peek is EofToken
     private val next: Token
@@ -21,10 +33,20 @@ class Tokenizer(private val sourceAsText: String) {
         get() {
             return when (val token = peek) {
                 is ScriptToken -> {
-                    if (next is EqualToken && next is CallExtResourceToken)
-                    /* Encapsulate ExternalResource declaration in script declaration as script will be ignored,
-                    * thus this external resource will be ignored too */
-                        ScriptDeclaration(token, tokenizeCallToExternalResource(token)) else TODO("Error not implemented")
+                    if (next is EqualToken) {
+                        val nextToken = next
+                        when(nextToken) {
+                            is CallExtResourceToken -> ScriptDeclaration(token, tokenizeCallToExternalResource(token))
+                            is CallSubResourceToken -> ScriptDeclaration(token, tokenizeCallToSubResource(token))
+                            else -> {
+                                val blubb = ""
+                                TODO("Error not implemented")
+                            }
+                        }
+                    } else {
+                        val blubb = ""
+                        TODO("Error not implemented")
+                    }
                 }
                 is IdentifierToken -> tokenizeAssignment(token)
                 is LeftBracketToken -> {
@@ -33,6 +55,7 @@ class Tokenizer(private val sourceAsText: String) {
                         is GdResourceToken -> GdResourceDeclaration(*tokenizeInnerAssignment())
                         is GdSceneToken -> GdSceneDeclaration(*tokenizeInnerAssignment())
                         is ExtResourceToken -> ExternalResourceDeclaration(*tokenizeInnerAssignment())
+                        is SubResourceToken -> SubResourceDeclaration(*tokenizeInnerAssignment())
                         is NodeToken -> NodeDeclaration(*tokenizeInnerAssignment())
                         is ConnectionToken -> SignalConnectionDeclaration(*tokenizeInnerAssignment())
                         else -> {
@@ -40,7 +63,10 @@ class Tokenizer(private val sourceAsText: String) {
                         }
                     }
                 }
-                else -> TODO("Error not implemented")
+                else -> {
+                    val blubb = ""
+                    TODO("Error not implemented")
+                }
             }
         }
 
@@ -67,7 +93,12 @@ class Tokenizer(private val sourceAsText: String) {
     }
 
     private fun tokenizeAssignment(token: IdentifierToken): Declaration {
-        return if (next is EqualToken) tokenizeElement(token, next) else TODO("Error not implemented")
+        return if (next is EqualToken){
+            tokenizeElement(token, next)
+        } else {
+            val blubb = ""
+            TODO("Error not implemented")
+        }
     }
 
     private fun tokenizeDictionary(identifierToken: IdentifierToken?): Declaration {
@@ -81,6 +112,16 @@ class Tokenizer(private val sourceAsText: String) {
                 as Double).toInt() else TODO("Error not implemented")
             if (next !is RightParenthesisToken) TODO("Error not implemented")
             return CallExternalResourceDeclaration(token, idParameterValue)
+        } else TODO("Error not implemented")
+    }
+
+    private fun tokenizeCallToSubResource(token: IdentifierToken?): CallSubResourceDeclaration {
+        if (next is LeftParenthesisToken) {
+            val idParameterToken = next
+            val idParameterValue = if (idParameterToken is NumberToken) (idParameterToken.literal
+                as Double).toInt() else TODO("Error not implemented")
+            if (next !is RightParenthesisToken) TODO("Error not implemented")
+            return CallSubResourceDeclaration(token, idParameterValue)
         } else TODO("Error not implemented")
     }
 
@@ -102,9 +143,30 @@ class Tokenizer(private val sourceAsText: String) {
         val valueDeclaration = tokenizeElement(null, next)
         map[keyDeclaration] = valueDeclaration
         val token = next
-        if (token !is RightBraceToken) map.putAll(tokenizeDictionaryElement(token))
-        else next
+        if (token !is RightBraceToken) {
+            map.putAll(tokenizeDictionaryElement(token))
+        }
         return map
+    }
+
+    private fun tokenizeConstructor(identifierToken: IdentifierToken?, elementToken: IdentifierToken): ConstructorDeclaration {
+        val className = elementToken.lexeme
+        val constructorValues = mutableListOf<Declaration>()
+        if (next !is LeftParenthesisToken) {
+            val blubb = ""
+            TODO("Error not implemented")
+        }
+
+        var nextToken = next
+        while (nextToken !is RightParenthesisToken) {
+            if (nextToken is CommaToken) {
+                nextToken = next
+                continue
+            }
+            constructorValues.add(tokenizeElement(null, nextToken))
+            nextToken = next
+        }
+        return ConstructorDeclaration(identifierToken, className, *constructorValues.toTypedArray())
     }
 
     private fun tokenizeElement(identifierToken: IdentifierToken?, elementToken: Token): Declaration {
@@ -113,9 +175,26 @@ class Tokenizer(private val sourceAsText: String) {
             is StringToken -> StringDeclaration(identifierToken, elementToken.literal as String)
             is BooleanToken -> BooleanDeclaration(identifierToken, elementToken.literal as Boolean)
             is CallExtResourceToken -> tokenizeCallToExternalResource(identifierToken)
+            is CallSubResourceToken -> tokenizeCallToSubResource(identifierToken)
             is LeftBracketToken -> tokenizeArray(identifierToken)
             is LeftBraceToken -> tokenizeDictionary(identifierToken)
-            else -> TODO("Error not implemented")
+            is IdentifierToken -> if (elementToken.lexeme.first().isUpperCase()) {
+                tokenizeConstructor(identifierToken, elementToken)
+            } else {
+                val blubb = ""
+                TODO("Error not implemented")
+            }
+            is MinusToken -> if (peekNext is NumberToken && peekPrevious !is NumberToken) {
+                val numberToken = next
+                NumberDeclaration(identifierToken, "${elementToken.lexeme}${numberToken.literal.toString()}".toDouble())
+            } else {
+                val blubb = ""
+                TODO("Error not implemented")
+            }
+            else -> {
+                val blubb = ""
+                TODO("Error not implemented")
+            }
         }
     }
 }
