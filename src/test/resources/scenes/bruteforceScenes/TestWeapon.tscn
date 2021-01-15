@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://weapons/BaseWeapon.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/soundengine/resources/sfx/testWeapon_shoot.wav" type="AudioStream" id=2]
+
+[node name="TestWeapon" instance=ExtResource( 1 )]
+fireRatePerSecond = 0.2
+fullAuto = true
+energyCostPerBullet = 2.0
+sfxShoot = ExtResource( 2 )
+
+[node name="WeaponSprite" parent="." index="0"]
+modulate = Color( 0.596078, 0, 0, 1 )

@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://weapons/BaseWeapon.gd" type="Script" id=1]
+[ext_resource path="res://weapons/bullets/BaseRigidbodyBullet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/soundengine/resources/sfx/baseWeapon_shoot.wav" type="AudioStream" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://loading_ark.png" type="Texture" id=5]
+
+[node name="BaseWeapon" type="Node2D"]
+script = ExtResource( 1 )
+bullet = ExtResource( 2 )
+sfxShoot = ExtResource( 3 )
+
+[node name="WeaponSprite" type="Sprite" parent="."]
+position = Vector2( 0, 5 )
+scale = Vector2( 0.748832, 0.15625 )
+texture = ExtResource( 4 )
+offset = Vector2( 32, 5 )
+
+[node name="BulletSpawnPointNode2D" type="Node2D" parent="WeaponSprite"]
+position = Vector2( 79, 0 )
+
+[node name="DropUi" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -12.5
+margin_top = -12.5
+margin_right = 12.5
+margin_bottom = 12.5
+rect_min_size = Vector2( 25, 25 )
+
+[node name="TextureProgress" type="TextureProgress" parent="DropUi"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+max_value = 2.0
+step = 0.0
+texture_progress = ExtResource( 5 )
+fill_mode = 4

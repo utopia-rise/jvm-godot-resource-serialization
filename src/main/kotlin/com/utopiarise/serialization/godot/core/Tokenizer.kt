@@ -38,6 +38,7 @@ class Tokenizer(private val sourceAsText: String) {
                         when(nextToken) {
                             is CallExtResourceToken -> ScriptDeclaration(token, tokenizeCallToExternalResource(token))
                             is CallSubResourceToken -> ScriptDeclaration(token, tokenizeCallToSubResource(token))
+                            is NullToken -> NullDeclaration(token)
                             else -> {
                                 val blubb = ""
                                 TODO("Error not implemented")

@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://levels/base/scripts/LevelPlayerNodeManager.gd" type="Script" id=1]
+[ext_resource path="res://matchmaking/MatchManager.gd" type="Script" id=2]
+[ext_resource path="res://scripts/utils/engine/IndexKeeper.gd" type="Script" id=3]
+[ext_resource path="res://scripts/camera/CameraMutliTargetFollower.gd" type="Script" id=4]
+
+[node name="BaseLevel" type="Node2D"]
+
+[node name="BaseScripts[only_modify_in_base_level]" type="Node" parent="."]
+editor/display_folded = true
+
+[node name="LevelPlayerNodeManager" type="Node" parent="BaseScripts[only_modify_in_base_level]"]
+script = ExtResource( 1 )
+playerContainerNodePath = NodePath("../../PlayersContainer")
+playerSpawnPointContainerNodePath = NodePath("../../Environment/PlayerSpawnPointContainer")
+
+[node name="MatchManager" type="Node" parent="BaseScripts[only_modify_in_base_level]"]
+script = ExtResource( 2 )
+
+[node name="Timer" type="Timer" parent="BaseScripts[only_modify_in_base_level]/MatchManager"]
+
+[node name="Environment" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="TileMap" type="TileMap" parent="Environment"]
+cell_size = Vector2( 50, 50 )
+cell_quadrant_size = 10
+format = 1
+script = ExtResource( 3 )
+
+[node name="PlayerSpawnPointContainer" type="Node2D" parent="Environment"]
+
+[node name="PerkSpawnPointContainer" type="Node2D" parent="Environment"]
+
+[node name="WeaponSpawnPointContainer" type="Node2D" parent="Environment"]
+
+[node name="PerkAndWeaponPickUpContainer" type="Node2D" parent="."]
+script = ExtResource( 3 )
+indexInTree = -3
+
+[node name="BulletContainer" type="Node2D" parent="."]
+script = ExtResource( 3 )
+indexInTree = -2
+
+[node name="PlayersContainer" type="Node2D" parent="."]
+script = ExtResource( 3 )
+indexInTree = -1
+
+[node name="CameraMutliTargetFollower" type="Camera2D" parent="."]
+current = true
+limit_smoothed = true
+smoothing_enabled = true
+smoothing_speed = 10.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 4 )
+[connection signal="timeout" from="BaseScripts[only_modify_in_base_level]/MatchManager/Timer" to="BaseScripts[only_modify_in_base_level]/MatchManager" method="_on_Timer_timeout"]

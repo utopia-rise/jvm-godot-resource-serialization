@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://levels/base/BaseLevel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/tilesets/prototyping_tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://levels/spawner/Spawner.tscn" type="PackedScene" id=3]
+[ext_resource path="res://weapons/pickups/BaseWeaponPickup.tscn" type="PackedScene" id=4]
+[ext_resource path="res://weapons/TestWeapon.tscn" type="PackedScene" id=5]
+[ext_resource path="res://levels/prototyping/DebugSceneCamera2D.gd" type="Script" id=6]
+
+[node name="PrototypingLevel" instance=ExtResource( 1 )]
+
+[node name="LevelPlayerNodeManager" parent="BaseScripts[only_modify_in_base_level]" index="0"]
+playerContainerNodePath = NodePath("../../../PrototypingLevel/PlayersContainer")
+playerSpawnPointContainerNodePath = NodePath("../../../PrototypingLevel/Environment/PlayerSpawnPointContainer")
+
+[node name="Environment" parent="." index="1"]
+editor/display_folded = false
+
+[node name="TileMap" parent="Environment" index="0"]
+tile_set = ExtResource( 2 )
+cell_quadrant_size = 50
+collision_mask = 7
+tile_data = PoolIntArray( -327686, 0, 0, -393183, 0, 0, -262150, 0, 0, -327647, 0, 0, -196614, 0, 0, -262111, 0, 0, -131078, 0, 0, -196575, 0, 0, -65542, 0, 0, -131039, 0, 0, -6, 0, 0, -65503, 0, 0, 65530, 0, 0, 18, 3, 0, 19, 3, 0, 20, 3, 0, 21, 3, 0, 22, 3, 0, 23, 3, 0, 33, 0, 0, 131066, 0, 0, 65569, 0, 0, 196602, 0, 0, 131105, 0, 0, 262138, 0, 0, 196623, 1, 0, 196624, 1, 0, 196625, 1, 0, 196626, 1, 0, 196627, 1, 0, 196634, 1, 0, 196635, 1, 0, 196636, 1, 0, 196637, 1, 0, 196638, 1, 0, 196639, 1, 0, 196640, 1, 0, 196641, 0, 0, 327674, 0, 0, 262177, 0, 0, 393210, 0, 0, 393211, 2, 0, 393212, 2, 0, 327713, 0, 0, 458746, 0, 0, 393249, 0, 0, 524282, 0, 0, 458760, 3, 0, 458761, 3, 0, 458762, 3, 0, 458763, 3, 0, 458764, 3, 0, 458785, 0, 0, 589818, 0, 0, 524307, 0, 0, 524308, 0, 0, 524309, 0, 0, 524310, 0, 0, 524311, 0, 0, 524312, 0, 0, 524313, 0, 0, 524319, 2, 0, 524320, 2, 0, 524321, 0, 0, 655354, 0, 0, 655355, 0, 0, 655356, 0, 0, 655357, 0, 0, 655358, 0, 0, 655359, 0, 0, 589824, 0, 0, 589825, 0, 0, 589843, 0, 0, 589844, 0, 0, 589845, 0, 0, 589846, 0, 0, 589847, 0, 0, 589848, 0, 0, 589849, 0, 0, 589857, 0, 0, 720890, 0, 0, 720891, 0, 0, 720892, 0, 0, 720893, 0, 0, 720894, 0, 0, 720895, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655379, 0, 0, 655380, 0, 0, 655381, 0, 0, 655382, 0, 0, 655383, 0, 0, 655384, 0, 0, 655385, 0, 0, 655393, 0, 0, 786426, 0, 0, 786427, 0, 0, 786428, 0, 0, 786429, 0, 0, 786430, 0, 0, 786431, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0, 720916, 0, 0, 720917, 0, 0, 720918, 0, 0, 720919, 0, 0, 720920, 0, 0, 720921, 0, 0, 720922, 2, 0, 720923, 2, 0, 720929, 0, 0, 851962, 0, 0, 851963, 0, 0, 851964, 0, 0, 851965, 0, 0, 851966, 0, 0, 851967, 0, 0, 786432, 0, 0, 786433, 0, 0, 786434, 0, 0, 786435, 0, 0, 786436, 0, 0, 786437, 0, 0, 786438, 0, 0, 786439, 0, 0, 786440, 0, 0, 786441, 0, 0, 786442, 0, 0, 786443, 0, 0, 786444, 0, 0, 786445, 0, 0, 786446, 0, 0, 786447, 0, 0, 786448, 0, 0, 786449, 0, 0, 786450, 0, 0, 786451, 0, 0, 786452, 0, 0, 786453, 0, 0, 786454, 0, 0, 786455, 0, 0, 786456, 0, 0, 786457, 0, 0, 786465, 0, 0, 917498, 0, 0, 917499, 0, 0, 917500, 0, 0, 917501, 0, 0, 917502, 0, 0, 917503, 0, 0, 851968, 0, 0, 851969, 0, 0, 851970, 0, 0, 851971, 0, 0, 851972, 0, 0, 851973, 0, 0, 851974, 0, 0, 851975, 0, 0, 851976, 0, 0, 851977, 0, 0, 851978, 0, 0, 851979, 0, 0, 851980, 0, 0, 851981, 0, 0, 851982, 0, 0, 851983, 0, 0, 851984, 0, 0, 851985, 0, 0, 851986, 0, 0, 851987, 0, 0, 851988, 0, 0, 851989, 0, 0, 851990, 0, 0, 851991, 0, 0, 851992, 0, 0, 851993, 0, 0, 852001, 0, 0, 983034, 0, 0, 983035, 0, 0, 983036, 0, 0, 983037, 0, 0, 983038, 0, 0, 983039, 0, 0, 917504, 0, 0, 917505, 0, 0, 917506, 0, 0, 917507, 0, 0, 917508, 0, 0, 917509, 0, 0, 917510, 0, 0, 917511, 0, 0, 917512, 0, 0, 917513, 0, 0, 917514, 0, 0, 917515, 0, 0, 917516, 0, 0, 917517, 0, 0, 917518, 0, 0, 917519, 0, 0, 917520, 0, 0, 917521, 0, 0, 917522, 0, 0, 917523, 0, 0, 917524, 0, 0, 917525, 0, 0, 917526, 0, 0, 917527, 0, 0, 917528, 0, 0, 917529, 0, 0, 917530, 0, 0, 917531, 0, 0, 917532, 0, 0, 917533, 0, 0, 917534, 0, 0, 917535, 0, 0, 917536, 0, 0, 917537, 0, 0 )
+script = null
+
+[node name="PlayerSpawnPointContainer" parent="Environment" index="1"]
+editor/display_folded = true
+
+[node name="SpawnerArea2D" parent="Environment/PlayerSpawnPointContainer" index="0" instance=ExtResource( 3 )]
+position = Vector2( -200, 400 )
+
+[node name="SpawnerArea2D2" parent="Environment/PlayerSpawnPointContainer" index="1" instance=ExtResource( 3 )]
+position = Vector2( 1550, 100 )
+
+[node name="SpawnerArea2D3" parent="Environment/PlayerSpawnPointContainer" index="2" instance=ExtResource( 3 )]
+position = Vector2( 1550, 650 )
+
+[node name="SpawnerArea2D4" parent="Environment/PlayerSpawnPointContainer" index="3" instance=ExtResource( 3 )]
+position = Vector2( 950, -50 )
+
+[node name="SpawnerArea2D5" parent="Environment/PlayerSpawnPointContainer" index="4" instance=ExtResource( 3 )]
+position = Vector2( -200, 200 )
+
+[node name="SpawnerArea2D6" parent="Environment/PlayerSpawnPointContainer" index="5" instance=ExtResource( 3 )]
+position = Vector2( 500, 300 )
+
+[node name="BaseWeaponPickup" parent="Environment/WeaponSpawnPointContainer" index="0" instance=ExtResource( 4 )]
+position = Vector2( 634.763, 310.142 )
+weapon = ExtResource( 5 )
+
+[node name="CameraMutliTargetFollower" parent="." index="5"]
+zoom = Vector2( 1.5, 1.5 )
+maxZoomIn = 1.5
+
+[node name="DebugSceneCamera2D" type="Camera2D" parent="." index="6"]
+position = Vector2( 700, 150 )
+zoom = Vector2( 2, 2 )
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false
+script = ExtResource( 6 )
+defaultCameraNodePath = NodePath("../CameraMutliTargetFollower")
