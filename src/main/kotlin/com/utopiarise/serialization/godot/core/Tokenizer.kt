@@ -162,6 +162,7 @@ class Tokenizer(sourceAsText: String) {
 
     private fun tokenizeDictionaryElement(elementToken: Token): Map<Declaration, Declaration> {
         val map = HashMap<Declaration, Declaration>()
+        if (elementToken is RightBraceToken) return map
         val keyDeclaration = tokenizeElement(null, elementToken)
         if (next !is SemiColonToken) {
             throw MalformedSceneException("No ${SemiColonToken::class} between key and value found for dictionary. Line ${peek.line}")
