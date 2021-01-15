@@ -3,14 +3,9 @@ package com.utopiarise.serialization.godot.scene
 import com.utopiarise.serialization.godot.util.getResourceUrl
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
 
 class SceneDeserializerTest {
-
-    @Test
-    fun `don't crash on unknown stuff`() {
-        val sceneModel = sceneFromTscn(getResourceUrl("scenes/SceneSerializationTestScene.tscn").file)
-        val blubb = ""
-    }
 
     @Test
     fun `scene TestScene deserialized`() {
@@ -92,5 +87,15 @@ class SceneDeserializerTest {
         assertEquals(sceneModel.nodes[1], sceneModel.signalConnections[1].from)
         assertEquals(sceneModel.nodes[1], sceneModel.signalConnections[1].to)
         assertEquals("_on_GdScript_tree_entered", sceneModel.signalConnections[1].method)
+    }
+
+    @Test
+    fun `bruteforce test with many random scenes`() {
+        File("src/test/resources/scenes/bruteforceScenes")
+            .walkTopDown()
+            .filter { it.isFile && it.extension == "tscn" }
+            .forEach { sceneFile ->
+                sceneFromTscn(sceneFile.absolutePath)
+            }
     }
 }

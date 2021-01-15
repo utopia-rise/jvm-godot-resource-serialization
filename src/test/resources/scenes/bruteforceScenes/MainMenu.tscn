@@ -1,0 +1,115 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Ui/MainTheme.tres" type="Theme" id=1]
+[ext_resource path="res://Ui/Menu/MainMenu/MainMenuManager.cs" type="Script" id=2]
+[ext_resource path="res://Ui/Menu/MainMenu/Assets/level_background.jpg" type="Texture" id=3]
+[ext_resource path="res://Ui/Menu/assets/menu_font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Ui/Intro/assets/intro_font.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Entities/DemonEntity/Particles/DemonCanvasItemMaterial.tres" type="Material" id=6]
+[ext_resource path="res://Entities/DemonEntity/Particles/DemonParticlesMaterial.tres" type="Material" id=7]
+[ext_resource path="res://Entities/DemonEntity/Particles/Textures/smoke_spriteSheet.png" type="Texture" id=8]
+[ext_resource path="res://Entities/PlayerEntity/Animation/PlayerSpriteFrames.tres" type="SpriteFrames" id=9]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+startGameWithPointLimitButtonNodePath = NodePath("MarginContainer/PanelContainer/VBoxContainer/StartWithPointLimitButton")
+startGameButtonNodePath = NodePath("MarginContainer/PanelContainer/VBoxContainer/StartWithWorldLimitButton")
+quitGameButtonNodePath = NodePath("MarginContainer/PanelContainer/VBoxContainer/QuitButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 237.0
+margin_bottom = 104.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 80
+custom_constants/margin_left = 80
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+margin_left = 80.0
+margin_top = 80.0
+margin_right = 329.0
+margin_bottom = 192.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 243.0
+margin_bottom = 108.0
+alignment = 1
+
+[node name="StartWithPointLimitButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_right = 237.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 32 )
+theme = ExtResource( 1 )
+custom_fonts/font = ExtResource( 4 )
+text = "game_start_point_limit_button"
+flat = true
+
+[node name="StartWithWorldLimitButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 237.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 80, 32 )
+theme = ExtResource( 1 )
+custom_fonts/font = ExtResource( 4 )
+text = "game_start_world_limit_button"
+flat = true
+
+[node name="QuitButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_top = 72.0
+margin_right = 237.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 80, 32 )
+theme = ExtResource( 1 )
+custom_fonts/font = ExtResource( 4 )
+text = "game_quit_button"
+flat = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -21.0
+custom_constants/margin_right = 10
+custom_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="MarginContainer2"]
+margin_right = 1270.0
+margin_bottom = 11.0
+custom_fonts/font = ExtResource( 5 )
+text = "about"
+align = 2
+
+[node name="Particles2D" type="Particles2D" parent="."]
+material = ExtResource( 6 )
+position = Vector2( 191.579, 571.579 )
+amount = 50
+lifetime = 0.5
+randomness = 1.0
+visibility_rect = Rect2( -64, -64, 128, 128 )
+local_coords = false
+draw_order = 1
+process_material = ExtResource( 7 )
+texture = ExtResource( 8 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 1081.05, 188.421 )
+frames = ExtResource( 9 )
+animation = "down"
+frame = 5
+playing = true

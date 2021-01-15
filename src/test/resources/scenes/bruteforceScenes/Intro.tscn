@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Ui/MainTheme.tres" type="Theme" id=1]
+[ext_resource path="res://Ui/Intro/IntroManager.cs" type="Script" id=2]
+[ext_resource path="res://Ui/Menu/MainMenu/MainMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Ui/Intro/assets/main.ogv" type="VideoStream" id=4]
+[ext_resource path="res://Ui/Intro/assets/intro_font.tres" type="DynamicFont" id=5]
+
+[node name="Intro" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+videoPlayerNodePath = NodePath("VideoPlayer")
+skipButtonNodePath = NodePath("MarginContainer/Button")
+mainMenuSceneScene = ExtResource( 3 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="VideoPlayer" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+stream = ExtResource( 4 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -142.0
+margin_top = -52.0
+custom_constants/margin_right = 20
+custom_constants/margin_bottom = 20
+
+[node name="Button" type="Button" parent="MarginContainer"]
+margin_right = 122.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 32 )
+size_flags_horizontal = 9
+size_flags_vertical = 9
+custom_fonts/font = ExtResource( 5 )
+text = "intro_skip_button"
+flat = true

@@ -1,0 +1,236 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Ui/MainTheme.tres" type="Theme" id=1]
+[ext_resource path="res://Ui/TwitterUi/Dynamic/TweetUi.cs" type="Script" id=2]
+[ext_resource path="res://Ui/TwitterUi/Assets/avatar_thegood.png" type="Texture" id=3]
+[ext_resource path="res://Ui/TwitterUi/Assets/avatar_thebad.png" type="Texture" id=4]
+[ext_resource path="res://Ui/TwitterUi/Assets/avatar_tutor.png" type="Texture" id=5]
+[ext_resource path="res://icon.png" type="Texture" id=6]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter_font.tres" type="DynamicFont" id=7]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter_font_small.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter-expand.svg" type="Texture" id=9]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter_font_text.tres" type="DynamicFont" id=10]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter-reply.svg" type="Texture" id=11]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter-retweet.svg" type="Texture" id=12]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter-like.svg" type="Texture" id=13]
+[ext_resource path="res://Ui/TwitterUi/Assets/twitter-share.svg" type="Texture" id=14]
+
+[node name="TwitterItem" type="PanelContainer"]
+margin_right = 250.0
+margin_bottom = 55.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+avatarNodePath = NodePath("MarginContainer/HBoxContainer/MarginContainer/TextureRect")
+positiveAvatar = ExtResource( 3 )
+negativeAvatar = ExtResource( 4 )
+tutorAvatar = ExtResource( 5 )
+infoAvatar = ExtResource( 5 )
+nameNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/AutorName")
+displayNameNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/TwitterName")
+timeSincePostingNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/TimeSincePosting")
+textNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/Text")
+repliesNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer/ReplyLabel")
+retweetsNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer2/RetweetLabel")
+likesNodePath = NodePath("MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer3/LikeLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 244.0
+margin_bottom = 51.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_right = 238.0
+margin_bottom = 47.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+margin_right = 21.0
+margin_bottom = 47.0
+custom_constants/margin_top = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
+margin_top = 2.0
+margin_right = 21.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 21, 21 )
+size_flags_vertical = 0
+texture = ExtResource( 6 )
+expand = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 25.0
+margin_right = 238.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_right = 213.0
+margin_bottom = 15.0
+mouse_filter = 1
+size_flags_horizontal = 3
+custom_constants/margin_top = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer"]
+margin_top = 5.0
+margin_right = 213.0
+margin_bottom = 15.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="AutorName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_right = 131.0
+margin_bottom = 10.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 7 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Trisha Gee"
+clip_text = true
+
+[node name="TwitterName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 131.0
+margin_top = 4.0
+margin_right = 184.0
+margin_bottom = 10.0
+size_flags_vertical = 12
+custom_fonts/font = ExtResource( 8 )
+custom_colors/font_color = Color( 0.533333, 0.6, 0.65098, 1 )
+text = "@trisha_gee"
+
+[node name="TimeSincePosting" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 184.0
+margin_top = 4.0
+margin_right = 208.0
+margin_bottom = 10.0
+size_flags_horizontal = 8
+size_flags_vertical = 12
+custom_fonts/font = ExtResource( 8 )
+custom_colors/font_color = Color( 0.533333, 0.6, 0.65098, 1 )
+text = "· 9m"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 208.0
+margin_right = 213.0
+margin_bottom = 4.0
+rect_min_size = Vector2( 5, 4 )
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture = ExtResource( 9 )
+expand = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 19.0
+margin_right = 213.0
+margin_bottom = 35.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Text" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+margin_right = 213.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 10 )
+bbcode_enabled = true
+scroll_active = false
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 39.0
+margin_right = 213.0
+margin_bottom = 47.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 8
+custom_constants/margin_left = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2"]
+margin_left = 5.0
+margin_right = 213.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+margin_right = 49.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer"]
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 8, 8 )
+size_flags_vertical = 0
+texture = ExtResource( 11 )
+expand = true
+
+[node name="ReplyLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer"]
+margin_left = 8.0
+margin_top = 1.0
+margin_right = 21.0
+margin_bottom = 7.0
+custom_fonts/font = ExtResource( 8 )
+text = "1"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+margin_left = 53.0
+margin_right = 102.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer2"]
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 8, 8 )
+size_flags_vertical = 0
+texture = ExtResource( 12 )
+expand = true
+
+[node name="RetweetLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer2"]
+margin_left = 8.0
+margin_top = 1.0
+margin_right = 21.0
+margin_bottom = 7.0
+custom_fonts/font = ExtResource( 8 )
+text = "1"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+margin_left = 106.0
+margin_right = 155.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer3"]
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 8, 8 )
+size_flags_vertical = 0
+texture = ExtResource( 13 )
+expand = true
+
+[node name="LikeLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer3"]
+margin_left = 8.0
+margin_top = 1.0
+margin_right = 21.0
+margin_bottom = 7.0
+custom_fonts/font = ExtResource( 8 )
+text = "1"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2"]
+margin_left = 159.0
+margin_right = 208.0
+margin_bottom = 8.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer2/HBoxContainer4"]
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 8, 8 )
+size_flags_vertical = 0
+texture = ExtResource( 14 )
+expand = true

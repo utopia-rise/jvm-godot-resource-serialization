@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Ui/LevelMoveMouseControl.cs" type="Script" id=1]
+
+[node name="LevelMoveMouseControl" type="Control"]
+editor/display_folded = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+cameraNodePath = NodePath("../..")
+mouseCaptureLeftNodePath = NodePath("MouseCaptureLeft")
+mouseCaptureRightNodePath = NodePath("MouseCaptureRight")
+mouseCaptureTopNodePath = NodePath("MouseCaptureTop")
+mouseCaptureBottomNodePath = NodePath("MouseCaptureBottom")
+
+[node name="MouseCaptureLeft" type="Control" parent="."]
+anchor_bottom = 1.0
+rect_min_size = Vector2( 50, 0 )
+
+[node name="MouseCaptureRight" type="Control" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 50, 0 )
+rect_scale = Vector2( -1, 1 )
+
+[node name="MouseCaptureTop" type="Control" parent="."]
+anchor_right = 1.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="MouseCaptureBottom" type="Control" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 50 )
+rect_scale = Vector2( 1, -1 )

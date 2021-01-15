@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Ui/InteractionOption.cs" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Ui/Assets/popup_font.tres" type="DynamicFont" id=3]
+
+[node name="InteractionOption" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+icon = ExtResource( 2 )
+textureRectNodePath = NodePath("TextureRect")
+inactivityColorRectNodePath = NodePath("TextureRect/InactivityColorRect")
+labelNodePath = NodePath("Label")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 2 )
+expand = true
+
+[node name="InactivityColorRect" type="ColorRect" parent="TextureRect"]
+visible = false
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+color = Color( 0.0823529, 0.12549, 0.168627, 0.85098 )
+
+[node name="Label" type="Label" parent="."]
+margin_top = 132.0
+margin_right = 128.0
+margin_bottom = 160.0
+custom_fonts/font = ExtResource( 3 )
+text = "Kill Tree"
+align = 1

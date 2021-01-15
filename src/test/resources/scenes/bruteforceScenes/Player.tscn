@@ -1,0 +1,93 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://Entities/PlayerEntity/Player.cs" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Entities/Common/Movement/EntityMovement.cs" type="Script" id=3]
+[ext_resource path="res://Entities/PlayerEntity/RemoveTreeChecker.cs" type="Script" id=4]
+[ext_resource path="res://Entities/PlayerEntity/PlayerStateMachine.cs" type="Script" id=5]
+[ext_resource path="res://Entities/PlayerEntity/States/PlayerIdleState.cs" type="Script" id=6]
+[ext_resource path="res://SoundEngine/Assets/Sfx/whistle1.ogg" type="AudioStream" id=7]
+[ext_resource path="res://SoundEngine/Assets/Sfx/whistle2.ogg" type="AudioStream" id=8]
+[ext_resource path="res://SoundEngine/Assets/Sfx/whistle3.ogg" type="AudioStream" id=9]
+[ext_resource path="res://SoundEngine/Assets/Sfx/whistle4.ogg" type="AudioStream" id=10]
+[ext_resource path="res://Entities/PlayerEntity/States/PlayerMoveToPositionState.cs" type="Script" id=11]
+[ext_resource path="res://SoundEngine/Assets/Sfx/player_walk.ogg" type="AudioStream" id=12]
+[ext_resource path="res://Entities/PlayerEntity/States/PlayerPlantTreeState.cs" type="Script" id=13]
+[ext_resource path="res://SoundEngine/Assets/Sfx/tree_plant.wav" type="AudioStream" id=14]
+[ext_resource path="res://Entities/PlayerEntity/States/PlayerHealTreeState.cs" type="Script" id=15]
+[ext_resource path="res://SoundEngine/Assets/Sfx/tree_healing.wav" type="AudioStream" id=16]
+[ext_resource path="res://Entities/PlayerEntity/Animation/PlayerSpriteFrames.tres" type="SpriteFrames" id=17]
+[ext_resource path="res://Entities/PlayerEntity/Animation/PlayerAnimationManager.cs" type="Script" id=18]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 52.0092
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 51.9996
+
+[node name="Player" type="KinematicBody2D" groups=[
+"player",
+]]
+collision_layer = 2
+script = ExtResource( 1 )
+entityMovementNodePath = NodePath("Movement")
+removeTreeCheckerNodePath = NodePath("RemoveTreeChecker")
+playerStateMachineNodePath = NodePath("StateMachine")
+
+[node name="Sprite" type="Sprite" parent="."]
+visible = false
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Movement" type="Node2D" parent="."]
+script = ExtResource( 3 )
+entityBodyNodePath = NodePath("..")
+
+[node name="RemoveTreeChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RemoveTreeChecker"]
+shape = SubResource( 2 )
+
+[node name="StateMachine" type="Node2D" parent="." groups=[
+"state_machine",
+]]
+script = ExtResource( 5 )
+initialStateNodePath = NodePath("IdleState")
+idle = NodePath("IdleState")
+moveToPosition = NodePath("MoveToPositionState")
+plantTree = NodePath("PlantTreeState")
+healTree = NodePath("HealTreeState")
+
+[node name="IdleState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 6 )
+whistleSounds = [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ]
+
+[node name="MoveToPositionState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 11 )
+entityMovementNodePath = NodePath("../../Movement")
+playerWalkSound = ExtResource( 12 )
+
+[node name="PlantTreeState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 13 )
+entityMovementNodePath = NodePath("../../Movement")
+playerWalkSound = ExtResource( 12 )
+plantTree = ExtResource( 14 )
+
+[node name="HealTreeState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 15 )
+entityMovementNodePath = NodePath("../../Movement")
+playerWalkSound = ExtResource( 12 )
+healTree = ExtResource( 16 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = ExtResource( 17 )
+animation = "down"
+offset = Vector2( 0, -96 )
+script = ExtResource( 18 )
+entityMovementNodePath = NodePath("../Movement")

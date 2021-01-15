@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Ui/TwitterUi/Effects/BuffParticleEffectMaterial.tres" type="Material" id=1]
+[ext_resource path="res://Ui/TwitterUi/Assets/ic_plus_red.svg" type="Texture" id=2]
+
+[node name="playerBuffParticleEffect" type="Node2D"]
+
+[node name="Particles2D" type="Particles2D" parent="."]
+local_coords = false
+process_material = ExtResource( 1 )
+texture = ExtResource( 2 )

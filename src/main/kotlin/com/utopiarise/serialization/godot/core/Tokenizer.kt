@@ -125,14 +125,24 @@ class Tokenizer(private val sourceAsText: String) {
         } else TODO("Error not implemented")
     }
 
-    private fun tokenizeArray(token: IdentifierToken?) = ArrayDeclaration(token, *tokenizeArrayElement(next).toTypedArray())
+    private fun tokenizeArray(token: IdentifierToken?, elementToken: LeftBracketToken) = ArrayDeclaration(token, *tokenizeArrayElement(elementToken).toTypedArray())
 
     private fun tokenizeArrayElement(elementToken: Token): List<Declaration> {
-        val arrayValues = ArrayList<Declaration>()
-        arrayValues.add(tokenizeElement(null, elementToken))
-        val nextToken = next
-        if (nextToken is CommaToken) arrayValues.addAll(tokenizeArrayElement(next))
-        else if (nextToken !is RightBracketToken) TODO("Error not implemented")
+        val arrayValues = mutableListOf<Declaration>()
+        if (elementToken !is LeftBracketToken) {
+            val blubb = ""
+            TODO("Error not implemented")
+        }
+
+        var nextToken = next
+        while (nextToken !is RightBracketToken) {
+            if (nextToken is CommaToken) {
+                nextToken = next
+                continue
+            }
+            arrayValues.add(tokenizeElement(null, nextToken))
+            nextToken = next
+        }
         return arrayValues
     }
 
@@ -142,7 +152,10 @@ class Tokenizer(private val sourceAsText: String) {
         if (next !is SemiColonToken) TODO("Error not implemented")
         val valueDeclaration = tokenizeElement(null, next)
         map[keyDeclaration] = valueDeclaration
-        val token = next
+        var token = next
+        if (token is CommaToken) {
+            token = next
+        }
         if (token !is RightBraceToken) {
             map.putAll(tokenizeDictionaryElement(token))
         }
@@ -176,7 +189,7 @@ class Tokenizer(private val sourceAsText: String) {
             is BooleanToken -> BooleanDeclaration(identifierToken, elementToken.literal as Boolean)
             is CallExtResourceToken -> tokenizeCallToExternalResource(identifierToken)
             is CallSubResourceToken -> tokenizeCallToSubResource(identifierToken)
-            is LeftBracketToken -> tokenizeArray(identifierToken)
+            is LeftBracketToken -> tokenizeArray(identifierToken, elementToken)
             is LeftBraceToken -> tokenizeDictionary(identifierToken)
             is IdentifierToken -> if (elementToken.lexeme.first().isUpperCase()) {
                 tokenizeConstructor(identifierToken, elementToken)

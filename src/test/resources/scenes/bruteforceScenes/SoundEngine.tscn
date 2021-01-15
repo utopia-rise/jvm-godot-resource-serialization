@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://SoundEngine/SoundEngineNode.cs" type="Script" id=1]
+
+[node name="SoundEngine" type="Node" groups=[
+"soundEngine",
+]]
+script = ExtResource( 1 )

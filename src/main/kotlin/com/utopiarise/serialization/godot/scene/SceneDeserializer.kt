@@ -26,7 +26,7 @@ internal class SceneDeserializer {
             "Malformed scene ${file.path}: Got no \"load_steps\" in \"gd_scene\" declaration"
         }
         val externalResources = deserializeExternalResources(declarations, file)
-        val nodes = deserializeNodes(declarations, file)
+        val nodes = deserializeNodes(declarations, file, externalResources)
         val signalConnections = deserializeSignalConnections(declarations, file, nodes)
 
         return SceneModel(
@@ -57,7 +57,7 @@ internal class SceneDeserializer {
             )
         }
 
-    private fun deserializeNodes(declarations: List<Declaration>, file: File): List<Node> {
+    private fun deserializeNodes(declarations: List<Declaration>, file: File, externalResources: List<ExternalResource>): List<Node> {
         val declarationToChildDeclarations: MutableMap<Declaration, List<Declaration>> = mutableMapOf()
         val tmpNonStandaloneDeclarations = mutableListOf<Declaration>()
         declarations
@@ -77,10 +77,30 @@ internal class SceneDeserializer {
                 val name = requireNotNull(node.getValue<String>("name")) {
                     "Malformed \"node\" declaration in ${file.path}: Got no \"name\" value"
                 }
-                val type = requireNotNull(node.getValue<String>("type")) {
-                    "Malformed \"node\" declaration in ${file.path}: Got no \"type\" value"
-                }
+                val type = node.getValue<String>("type")
+                val pathToInheritedScene = if (type == null) {
+                    node
+                        .getValue<Int>("instance")
+                        ?.let { externalResourceId ->
+                            externalResources
+                                .firstOrNull { it.id == externalResourceId }
+                                ?.path
+                        }
+                } else null
+
                 val parent = node.getValue<String>("parent")
+
+                if (type == null && pathToInheritedScene == null) {
+                    val rootNode = declarationToChildDeclarations
+                        .keys
+                        .filterIsInstance<NodeDeclaration>()
+                        .first { it.getValue<String>("parent") == null }
+
+                    // if scene is inherited, it is allowed for nodes to not have a type nor a pathToInheritedScene as they are defined in the scene that was inherited from
+                    if (rootNode.getValue<Int>("instance") == null) {
+                        throw IllegalArgumentException("Malformed \"node\" declaration in ${file.path}: Got no \"type\" or \"path\" value")
+                    }
+                }
 
                 val scriptPath = childDeclarations
                     .filterIsInstance<ScriptDeclaration>()
@@ -103,10 +123,10 @@ internal class SceneDeserializer {
                             ?.getValue<String>("path")
                     }
 
-
                 Node(
                     name,
                     type,
+                    pathToInheritedScene,
                     parent,
                     scriptPath
                 )

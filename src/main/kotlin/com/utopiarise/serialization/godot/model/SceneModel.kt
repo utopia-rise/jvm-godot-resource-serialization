@@ -16,7 +16,8 @@ data class ExternalResource(
 
 data class Node(
     val name: String,
-    val type: String,
+    val type: String?,
+    val inheritedScenePath: String? = null,
     val parent: String? = null,
     val script: String? = null
 )

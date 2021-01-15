@@ -1,0 +1,93 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Ui/Menu/EndMenu/EndMenuManager.cs" type="Script" id=1]
+[ext_resource path="res://SoundEngine/Assets/Sfx/losing_sound.ogg" type="AudioStream" id=2]
+[ext_resource path="res://SoundEngine/Assets/Sfx/winning_sound.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Ui/Menu/assets/menu_font_title.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Ui/Menu/assets/menu_font.tres" type="DynamicFont" id=5]
+
+[node name="BaseEndMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -610, -170 )
+script = ExtResource( 1 )
+pointsLimitTitleText = "points_limit_title_text"
+pointsLimitMessageText = "points_limit_message"
+worldLimitTitleText = "world_limit_title"
+worldLimitMessageText = "world_limit_message"
+titleLabelNodePath = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/TitleLabel")
+loosingSound = ExtResource( 2 )
+winningSound = ExtResource( 3 )
+messageLabelNodePath = NodePath("VBoxContainer/VBoxContainer/MarginContainer3/MessageLabel")
+continueButtonNodePath = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ContinueButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+margin_left = 555.0
+margin_top = 286.0
+margin_right = 725.0
+margin_bottom = 433.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+margin_right = 170.0
+margin_bottom = 48.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 160.0
+margin_bottom = 38.0
+custom_fonts/font = ExtResource( 4 )
+text = "title"
+align = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+margin_top = 52.0
+margin_right = 170.0
+margin_bottom = 91.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="MessageLabel" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer3"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 160.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 5 )
+text = "some message"
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+margin_top = 95.0
+margin_right = 170.0
+margin_bottom = 147.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer/VBoxContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 160.0
+margin_bottom = 42.0
+rect_min_size = Vector2( 150, 32 )
+custom_fonts/font = ExtResource( 5 )
+text = "continue"
+flat = true
