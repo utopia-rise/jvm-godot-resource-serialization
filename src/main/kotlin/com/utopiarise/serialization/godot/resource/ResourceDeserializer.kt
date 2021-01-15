@@ -1,8 +1,6 @@
 package com.utopiarise.serialization.godot.resource
 
-import com.utopiarise.serialization.godot.core.Scanner
 import com.utopiarise.serialization.godot.core.Tokenizer
-import com.utopiarise.serialization.godot.model.SceneModel
 import java.io.File
 
 internal val pathMap = HashMap<String, Any>()
@@ -12,7 +10,11 @@ inline fun <reified T> fromGodotResource(resourcePath: String, resPathReplacemen
 
 fun <T> fromGodotResource(type: Class<T>, resourcePath: String, resPathReplacement: String): T {
     val resource = ResourceDeserializer(type, resPathReplacement).deserialize(File(resourcePath))
-    if (resource::class.java == type) return getOrPutResourceFromMap(resourcePath, resource) as T else TODO("Error not implemented")
+    return if (resource::class.java == type) {
+        getOrPutResourceFromMap(resourcePath, resource) as T
+    } else{
+        throw IllegalArgumentException("$resource is not equal to $type")
+    }
 }
 
 fun getOrPutResourceFromMap(resourcePath: String, any: Any): Any {
@@ -22,5 +24,5 @@ fun getOrPutResourceFromMap(resourcePath: String, any: Any): Any {
 
 @PublishedApi
 internal class ResourceDeserializer(private val clazz: Class<*>, private val resPathReplacement: String) {
-    fun deserialize(file: File): Any = DataInjecter(clazz, resPathReplacement).inject(Tokenizer(file.readText()).tokenize())
+    fun deserialize(file: File): Any = DataInjector(clazz, resPathReplacement).inject(Tokenizer(file.readText()).tokenize())
 }

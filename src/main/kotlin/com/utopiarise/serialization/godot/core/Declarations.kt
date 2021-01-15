@@ -12,7 +12,7 @@ class NumberDeclaration(token: IdentifierToken?, value: Double) : Declaration(to
             Integer::class.java -> (values[0] as Double).toInt()
             Short::class.java -> (values[0] as Double).toInt().toShort()
             Byte::class.java -> (values[0] as Double).toInt().toByte()
-            else -> TODO("Error not implemented")
+            else -> throw NotImplementedError("No conversion of ${values[0]} to type $type is implemented")
         }
     }
 }

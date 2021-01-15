@@ -49,7 +49,7 @@ class Scanner(private val source: String) {
 
             // Unterminated string.
             if (isAtEnd) {
-                TODO("Error not implemented")
+                throw MalformedSceneException("Unterminated string detected. Reached end of file without detecting a string termination.\nUnterminated string:\n${source.substring(start, current)}")
             }
             advance
             return StringToken(source.substring(start, current), source.substring(start + 1, current - 1), line)
@@ -88,8 +88,7 @@ class Scanner(private val source: String) {
                         c.isDigit() -> number
                         c.isAlpha() -> identifier
                         else -> {
-                            val blubb = ""
-                            TODO("Error not implemented")
+                            throw IllegalArgumentException("Character $c could not be matched to a known token")
                         }
                     }
                 }

@@ -2,27 +2,30 @@ package com.utopiarise.serialization.godot.core
 
 import kotlin.collections.ArrayList
 
-class Tokenizer(private val sourceAsText: String) {
+class Tokenizer(sourceAsText: String) {
     private var tokens = Scanner(sourceAsText).scanTokens()
-
     private var current = 0
 
     private val peek: Token
         get() = tokens[current]
+
     private val peekNext: Token
         get() {
             return if (!isAtEnd) {
                 tokens[current + 1]
             } else peek
         }
+
     private val peekPrevious: Token
         get() {
             return if (current != 0) {
                 tokens[current - 1]
             } else peek
         }
+
     private val isAtEnd: Boolean
         get() = peek is EofToken
+
     private val next: Token
         get() {
             if (!isAtEnd) current++
@@ -34,45 +37,39 @@ class Tokenizer(private val sourceAsText: String) {
             return when (val token = peek) {
                 is ScriptToken -> {
                     if (next is EqualToken) {
-                        val nextToken = next
-                        when(nextToken) {
+                        when(next) {
                             is CallExtResourceToken -> ScriptDeclaration(token, tokenizeCallToExternalResource(token))
                             is CallSubResourceToken -> ScriptDeclaration(token, tokenizeCallToSubResource(token))
                             is NullToken -> NullDeclaration(token)
-                            else -> {
-                                val blubb = ""
-                                TODO("Error not implemented")
-                            }
+                            else -> throw MalformedSceneException("Received a script identifier but the assignment is of unknown type. Line: ${token.line}")
                         }
                     } else {
-                        val blubb = ""
-                        TODO("Error not implemented")
+                        throw MalformedSceneException("Received a script identifier but the following token is not of type ${EqualToken::class}. Line: ${token.line}")
                     }
                 }
                 is IdentifierToken -> tokenizeAssignment(token)
                 is LeftBracketToken -> {
                     when (next) {
-                        is ResourceToken -> if (next is RightBracketToken) ResourceDeclaration() else TODO("Error not implemented")
+                        is ResourceToken -> if (next is RightBracketToken) {
+                            ResourceDeclaration()
+                        } else {
+                            throw IllegalArgumentException("Received a resource token but it is not terminated by token of type ${RightBracketToken::class}")
+                        }
                         is GdResourceToken -> GdResourceDeclaration(*tokenizeInnerAssignment())
                         is GdSceneToken -> GdSceneDeclaration(*tokenizeInnerAssignment())
                         is ExtResourceToken -> ExternalResourceDeclaration(*tokenizeInnerAssignment())
                         is SubResourceToken -> SubResourceDeclaration(*tokenizeInnerAssignment())
                         is NodeToken -> NodeDeclaration(*tokenizeInnerAssignment())
                         is ConnectionToken -> SignalConnectionDeclaration(*tokenizeInnerAssignment())
-                        else -> {
-                            throw NotImplementedError("${next.lexeme} after ${token.lexeme} not yet implemented")
-                        }
+                        else -> throw NotImplementedError("${next.lexeme} after ${token.lexeme} not yet implemented")
                     }
                 }
-                else -> {
-                    val blubb = ""
-                    TODO("Error not implemented")
-                }
+                else -> throw IllegalArgumentException("Received unexpected token $token for a start of a declaration")
             }
         }
 
     fun tokenize(): List<Declaration> {
-        val declarations = ArrayList<Declaration>()
+        val declarations = mutableListOf<Declaration>()
         while (!isAtEnd) {
             declarations.add(declaration)
             next
@@ -88,8 +85,12 @@ class Tokenizer(private val sourceAsText: String) {
                 declarationParameters.add(tokenizeAssignment(peek as IdentifierToken))
                 next
             }
-        } else TODO("Error not implemented")
-        if (peek !is RightBracketToken) TODO("Error not implemented")
+        } else {
+            throw IllegalArgumentException("Received a inner assignment without any identifier tokens. Line: ${peek.line}")
+        }
+        if (peek !is RightBracketToken){
+            throw MalformedSceneException("Inner assignment is not terminated by ${RightBracketToken::class}. Token received: $peek. Line: ${peek.line}")
+        }
         return declarationParameters.toTypedArray()
     }
 
@@ -97,8 +98,7 @@ class Tokenizer(private val sourceAsText: String) {
         return if (next is EqualToken){
             tokenizeElement(token, next)
         } else {
-            val blubb = ""
-            TODO("Error not implemented")
+            throw IllegalArgumentException("Received ${IdentifierToken::class} as assignment but not followed by ${EqualToken::class}. Line: ${token.line}")
         }
     }
 
@@ -109,21 +109,35 @@ class Tokenizer(private val sourceAsText: String) {
     private fun tokenizeCallToExternalResource(token: IdentifierToken?): CallExternalResourceDeclaration {
         if (next is LeftParenthesisToken) {
             val idParameterToken = next
-            val idParameterValue = if (idParameterToken is NumberToken) (idParameterToken.literal
-                as Double).toInt() else TODO("Error not implemented")
-            if (next !is RightParenthesisToken) TODO("Error not implemented")
+            val idParameterValue = if (idParameterToken is NumberToken) {
+                (idParameterToken.literal as Double).toInt()
+            } else {
+                throw MalformedSceneException("Received call to external resource without id. Line: ${peek.line}")
+            }
+            if (next !is RightParenthesisToken){
+                throw MalformedSceneException("Call to external resource not terminated by ${RightParenthesisToken::class} after id. Line: ${peek.line}")
+            }
             return CallExternalResourceDeclaration(token, idParameterValue)
-        } else TODO("Error not implemented")
+        } else {
+            throw MalformedSceneException("Call to external resource is missing ${LeftParenthesisToken::class}. Line: ${peek.line}")
+        }
     }
 
     private fun tokenizeCallToSubResource(token: IdentifierToken?): CallSubResourceDeclaration {
         if (next is LeftParenthesisToken) {
             val idParameterToken = next
-            val idParameterValue = if (idParameterToken is NumberToken) (idParameterToken.literal
-                as Double).toInt() else TODO("Error not implemented")
-            if (next !is RightParenthesisToken) TODO("Error not implemented")
+            val idParameterValue = if (idParameterToken is NumberToken) {
+                (idParameterToken.literal as Double).toInt()
+            } else {
+                throw MalformedSceneException("Received call to sub resource without id. Line: ${peek.line}")
+            }
+            if (next !is RightParenthesisToken) {
+                throw MalformedSceneException("Call to sub resource not terminated by ${RightParenthesisToken::class} after id. Line: ${peek.line}")
+            }
             return CallSubResourceDeclaration(token, idParameterValue)
-        } else TODO("Error not implemented")
+        } else {
+            throw MalformedSceneException("Call to sub resource is missing ${LeftParenthesisToken::class}. Line: ${peek.line}")
+        }
     }
 
     private fun tokenizeArray(token: IdentifierToken?, elementToken: LeftBracketToken) = ArrayDeclaration(token, *tokenizeArrayElement(elementToken).toTypedArray())
@@ -131,8 +145,7 @@ class Tokenizer(private val sourceAsText: String) {
     private fun tokenizeArrayElement(elementToken: Token): List<Declaration> {
         val arrayValues = mutableListOf<Declaration>()
         if (elementToken !is LeftBracketToken) {
-            val blubb = ""
-            TODO("Error not implemented")
+            throw IllegalArgumentException("Array is not starting with ${LeftBracketToken::class}. Line: ${peek.line}")
         }
 
         var nextToken = next
@@ -150,7 +163,9 @@ class Tokenizer(private val sourceAsText: String) {
     private fun tokenizeDictionaryElement(elementToken: Token): Map<Declaration, Declaration> {
         val map = HashMap<Declaration, Declaration>()
         val keyDeclaration = tokenizeElement(null, elementToken)
-        if (next !is SemiColonToken) TODO("Error not implemented")
+        if (next !is SemiColonToken) {
+            throw MalformedSceneException("No ${SemiColonToken::class} between key and value found for dictionary. Line ${peek.line}")
+        }
         val valueDeclaration = tokenizeElement(null, next)
         map[keyDeclaration] = valueDeclaration
         var token = next
@@ -167,8 +182,7 @@ class Tokenizer(private val sourceAsText: String) {
         val className = elementToken.lexeme
         val constructorValues = mutableListOf<Declaration>()
         if (next !is LeftParenthesisToken) {
-            val blubb = ""
-            TODO("Error not implemented")
+            throw MalformedSceneException("Constructor is missing ${LeftParenthesisToken::class}. Line: ${peek.line}")
         }
 
         var nextToken = next
@@ -196,19 +210,16 @@ class Tokenizer(private val sourceAsText: String) {
             is IdentifierToken -> if (elementToken.lexeme.first().isUpperCase()) {
                 tokenizeConstructor(identifierToken, elementToken)
             } else {
-                val blubb = ""
-                TODO("Error not implemented")
+                throw IllegalArgumentException("Did not expect an identifier token: $elementToken")
             }
             is MinusToken -> if (peekNext is NumberToken && peekPrevious !is NumberToken) {
                 val numberToken = next
                 NumberDeclaration(identifierToken, "${elementToken.lexeme}${numberToken.literal.toString()}".toDouble())
             } else {
-                val blubb = ""
-                TODO("Error not implemented")
+                throw IllegalArgumentException("Did not expect a minus token: $elementToken")
             }
             else -> {
-                val blubb = ""
-                TODO("Error not implemented")
+                throw IllegalArgumentException("Did not expect token: $elementToken")
             }
         }
     }

@@ -1,6 +1,3 @@
 package com.utopiarise.serialization.godot.core
 
-class UnknownKeywordException(message: String) : RuntimeException(message)
-class SyntaxException(message: String) : RuntimeException(message)
-class NoSetterException(operand: String) : RuntimeException("Cannot find setter for field $operand !")
-class WrongTypeException(message: String) : RuntimeException(message)
+class MalformedSceneException(message: String): IllegalArgumentException(message)

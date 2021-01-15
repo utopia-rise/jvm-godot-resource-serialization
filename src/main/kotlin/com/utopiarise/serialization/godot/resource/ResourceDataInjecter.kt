@@ -10,10 +10,14 @@ private fun getClass(type: Type): Class<*>? {
     if (className.startsWith("class ")) {
         className = className.substring("class ".length)
     }
-    return if (className.isEmpty()) null else Class.forName(className)
+    return if (className.isEmpty()){
+        null
+    } else {
+        Class.forName(className)
+    }
 }
 
-class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: String) {
+class DataInjector(private val clazz: Class<*>, private val resPathReplacement: String) {
 
     private val instance = clazz.getConstructor().newInstance()
     private val resourceMap = HashMap<Int, String>()
@@ -48,7 +52,9 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                         map[keyTriple?.second] = valueTriple?.second
                     }
                     map
-                } else TODO("Error not implemented")
+                } else {
+                    throw IllegalArgumentException("Got ${DictionaryDeclaration::class} but could not assign it to a map")
+                }
             }
             is ArrayDeclaration -> value(this, type) { t, _ ->
                 if (t.isArray) {
@@ -60,14 +66,18 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                         }
                     }
                     array
-                } else TODO("Error not implemented")
+                } else {
+                    throw IllegalArgumentException("Got ${ArrayDeclaration::class} but $t is no array")
+                }
             }
             is CallExternalResourceDeclaration -> value(this, type) { t, _ ->
                 val resPath = resourceMap[this.values[0] as Int]
                 if (resPath != null) {
                     val extResPath = resPath.replace("res://", resPathReplacement)
                     getOrPutResourceFromMap(resPath, ResourceDeserializer(t, resPathReplacement).deserialize(File(extResPath)))
-                } else TODO("Error not implemented")
+                } else {
+                    throw IllegalArgumentException("Received ${CallExternalResourceDeclaration::class} but value was null")
+                }
             }
             is NumberDeclaration -> value(this, type) { t, _ -> this getValueToType t }
             is StringDeclaration -> value(this, type) { _, _ -> this.values[0] }
@@ -78,7 +88,11 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
 
     private inline fun value(declaration: Declaration, type: Class<*>?, block: (Class<*>, Field?) -> Any): Triple<String?, Any, Class<*>> {
         val lexeme = declaration.identifierToken?.lexeme
-        val declaredField = if (type == null && lexeme != null) clazz.getDeclaredField(lexeme) else null
+        val declaredField = if (type == null && lexeme != null) {
+            clazz.getDeclaredField(lexeme)
+        } else {
+            null
+        }
         val selectedType = type ?: declaredField!!.type
         val value = block(selectedType, declaredField)
         return Triple(lexeme, value, selectedType)
@@ -95,6 +109,8 @@ class DataInjecter(private val clazz: Class<*>, private val resPathReplacement: 
                 resPath = it.values[0] as String
             }
         }
-        if (resId != null && resPath != null) resourceMap[resId!!] = resPath!!
+        if (resId != null && resPath != null) {
+            resourceMap[resId!!] = resPath!!
+        }
     }
 }
