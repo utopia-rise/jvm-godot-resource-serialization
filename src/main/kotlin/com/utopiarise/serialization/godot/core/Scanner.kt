@@ -29,12 +29,15 @@ class Scanner(private val source: String) {
         }
     private val number: Token
         get() {
-            while (peek.isDigit()) advance
-
-            if (peek == '.' && peekNext.isDigit()) {
+            while (
+                peek.isDigit() ||
+                (peek == '.' && peekNext.isDigit()) ||
+                (previous.isDigit() && peek == 'e' && peekNext == '-') ||
+                (previous == 'e' && peek == '-')
+            ) {
                 advance
-                while (peek.isDigit()) advance
             }
+
             return NumberToken(source.substring(start, current), source.substring(start, current).toDouble(), line)
         }
     private val string: Token
@@ -63,7 +66,11 @@ class Scanner(private val source: String) {
                 ',' -> CommaToken(source.substring(start, current), null, line)
                 '=' -> EqualToken(source.substring(start, current), null, line)
                 ':' -> SemiColonToken(source.substring(start, current), null, line)
-                '-' -> MinusToken(source.substring(start, current), null, line)
+                '-' -> if (peekNext.isDigit() && !previous.isDigit()) {
+                    number
+                } else {
+                    MinusToken(source.substring(start, current), null, line)
+                }
 
                 //Spaces are ignored
                 ' ' -> null

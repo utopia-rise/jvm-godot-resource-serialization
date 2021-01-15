@@ -1,93 +1,73 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Entities/PlayerEntity/Player.cs" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
-[ext_resource path="res://Entities/Common/Movement/EntityMovement.cs" type="Script" id=3]
-[ext_resource path="res://Entities/PlayerEntity/RemoveTreeChecker.cs" type="Script" id=4]
-[ext_resource path="res://Entities/PlayerEntity/PlayerStateMachine.cs" type="Script" id=5]
-[ext_resource path="res://Entities/PlayerEntity/States/PlayerIdleState.cs" type="Script" id=6]
-[ext_resource path="res://SoundEngine/Assets/Sfx/whistle1.ogg" type="AudioStream" id=7]
-[ext_resource path="res://SoundEngine/Assets/Sfx/whistle2.ogg" type="AudioStream" id=8]
-[ext_resource path="res://SoundEngine/Assets/Sfx/whistle3.ogg" type="AudioStream" id=9]
-[ext_resource path="res://SoundEngine/Assets/Sfx/whistle4.ogg" type="AudioStream" id=10]
-[ext_resource path="res://Entities/PlayerEntity/States/PlayerMoveToPositionState.cs" type="Script" id=11]
-[ext_resource path="res://SoundEngine/Assets/Sfx/player_walk.ogg" type="AudioStream" id=12]
-[ext_resource path="res://Entities/PlayerEntity/States/PlayerPlantTreeState.cs" type="Script" id=13]
-[ext_resource path="res://SoundEngine/Assets/Sfx/tree_plant.wav" type="AudioStream" id=14]
-[ext_resource path="res://Entities/PlayerEntity/States/PlayerHealTreeState.cs" type="Script" id=15]
-[ext_resource path="res://SoundEngine/Assets/Sfx/tree_healing.wav" type="AudioStream" id=16]
-[ext_resource path="res://Entities/PlayerEntity/Animation/PlayerSpriteFrames.tres" type="SpriteFrames" id=17]
-[ext_resource path="res://Entities/PlayerEntity/Animation/PlayerAnimationManager.cs" type="Script" id=18]
+[ext_resource path="res://entities/player/statemachine/PlayerStateMachine.gd" type="Script" id=1]
+[ext_resource path="res://entities/player/statemachine/state/IdleState.gd" type="Script" id=2]
+[ext_resource path="res://entities/player/statemachine/state/MovementState.gd" type="Script" id=3]
+[ext_resource path="res://entities/player/statemachine/state/MoveState.gd" type="Script" id=4]
+[ext_resource path="res://entities/player/PlayerWeaponGimbal.gd" type="Script" id=5]
+[ext_resource path="res://entities/player/Player.gd" type="Script" id=6]
+[ext_resource path="res://entities/player/Weapon.gd" type="Script" id=7]
+[ext_resource path="res://entities/common/Bullet.tscn" type="PackedScene" id=8]
 
-[sub_resource type="CircleShape2D" id=1]
-radius = 52.0092
+[sub_resource type="BoxShape" id=1]
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 51.9996
+[sub_resource type="CubeMesh" id=2]
 
-[node name="Player" type="KinematicBody2D" groups=[
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0, 0, 0, 1 )
+emission_enabled = true
+emission = Color( 0, 0.686275, 0.870588, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="CubeMesh" id=4]
+
+[node name="Player" type="KinematicBody" groups=[
 "player",
 ]]
-collision_layer = 2
-script = ExtResource( 1 )
-entityMovementNodePath = NodePath("Movement")
-removeTreeCheckerNodePath = NodePath("RemoveTreeChecker")
-playerStateMachineNodePath = NodePath("StateMachine")
+script = ExtResource( 6 )
 
-[node name="Sprite" type="Sprite" parent="."]
-visible = false
-scale = Vector2( 2, 2 )
-texture = ExtResource( 2 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="BodyCollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="Movement" type="Node2D" parent="."]
-script = ExtResource( 3 )
-entityBodyNodePath = NodePath("..")
+[node name="BodyMeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )
 
-[node name="RemoveTreeChecker" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 8
+[node name="OmniLight" type="OmniLight" parent="BodyMeshInstance"]
+light_color = Color( 0, 0.686275, 0.870588, 1 )
+light_energy = 2.0
+
+[node name="PlayerStateMachine" type="Spatial" parent="."]
+script = ExtResource( 1 )
+initialStateNodePath = NodePath("../PlayerStateMachine/MovementState/IdleState")
+idleState = NodePath("../PlayerStateMachine/MovementState/IdleState")
+moveState = NodePath("../PlayerStateMachine/MovementState/MoveState")
+
+[node name="MovementState" type="Spatial" parent="PlayerStateMachine"]
+script = ExtResource( 3 )
+kinematicBodyNodePath = NodePath("../..")
+
+[node name="IdleState" type="Spatial" parent="PlayerStateMachine/MovementState"]
+script = ExtResource( 2 )
+
+[node name="MoveState" type="Spatial" parent="PlayerStateMachine/MovementState"]
 script = ExtResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RemoveTreeChecker"]
-shape = SubResource( 2 )
-
-[node name="StateMachine" type="Node2D" parent="." groups=[
-"state_machine",
-]]
+[node name="WeaponGimbal" type="Spatial" parent="."]
 script = ExtResource( 5 )
-initialStateNodePath = NodePath("IdleState")
-idle = NodePath("IdleState")
-moveToPosition = NodePath("MoveToPositionState")
-plantTree = NodePath("PlantTreeState")
-healTree = NodePath("HealTreeState")
 
-[node name="IdleState" type="Node2D" parent="StateMachine"]
-script = ExtResource( 6 )
-whistleSounds = [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ]
+[node name="Weapon" type="MeshInstance" parent="WeaponGimbal"]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.8, 1, 0, -0.8 )
+visible = false
+mesh = SubResource( 4 )
+material/0 = null
+script = ExtResource( 7 )
+bulletPackedScene = ExtResource( 8 )
+lightNodePath = NodePath("../../BodyMeshInstance/OmniLight")
 
-[node name="MoveToPositionState" type="Node2D" parent="StateMachine"]
-script = ExtResource( 11 )
-entityMovementNodePath = NodePath("../../Movement")
-playerWalkSound = ExtResource( 12 )
-
-[node name="PlantTreeState" type="Node2D" parent="StateMachine"]
-script = ExtResource( 13 )
-entityMovementNodePath = NodePath("../../Movement")
-playerWalkSound = ExtResource( 12 )
-plantTree = ExtResource( 14 )
-
-[node name="HealTreeState" type="Node2D" parent="StateMachine"]
-script = ExtResource( 15 )
-entityMovementNodePath = NodePath("../../Movement")
-playerWalkSound = ExtResource( 12 )
-healTree = ExtResource( 16 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = ExtResource( 17 )
-animation = "down"
-offset = Vector2( 0, -96 )
-script = ExtResource( 18 )
-entityMovementNodePath = NodePath("../Movement")
+[node name="BulletSpawnPoint" type="Spatial" parent="WeaponGimbal/Weapon"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.01342 )

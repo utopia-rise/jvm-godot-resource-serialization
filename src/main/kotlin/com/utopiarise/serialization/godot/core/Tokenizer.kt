@@ -191,6 +191,7 @@ class Tokenizer(private val sourceAsText: String) {
             is CallSubResourceToken -> tokenizeCallToSubResource(identifierToken)
             is LeftBracketToken -> tokenizeArray(identifierToken, elementToken)
             is LeftBraceToken -> tokenizeDictionary(identifierToken)
+            is NullToken -> NullDeclaration(identifierToken)
             is IdentifierToken -> if (elementToken.lexeme.first().isUpperCase()) {
                 tokenizeConstructor(identifierToken, elementToken)
             } else {

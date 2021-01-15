@@ -32,5 +32,6 @@ class MinusToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, liter
 class StringToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class NumberToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 class BooleanToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
+class NullToken(lexeme: String, literal: Any?, line: Int) : Token(lexeme, literal, line)
 
 class EofToken(line: Int) : Token("", null, line)

@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scene/SoundPlates.gd" type="Script" id=1]
+[ext_resource path="res://scene/Plate.tscn" type="PackedScene" id=2]
+
+[node name="SoundPlates" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Plate" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.8, -10 )
+visible = false
+
+[node name="Plate2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, -10 )
+visible = false
+
+[node name="Plate3" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.8, -10 )
+visible = false
+
+[node name="Plate4" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.8, 0 )
+visible = false
+
+[node name="Plate5" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0 )
+visible = false
+
+[node name="Plate6" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.8, 0 )
+visible = false
+
+[node name="Plate7" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.8, 10 )
+visible = false
+
+[node name="Plate8" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 10 )
+visible = false
+
+[node name="Plate9" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.8, 10 )
+visible = false

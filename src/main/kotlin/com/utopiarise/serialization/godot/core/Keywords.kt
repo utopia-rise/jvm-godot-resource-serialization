@@ -36,6 +36,9 @@ enum class Keywords(private val text: String) {
     },
     FALSE("false") {
         override fun token(text: String, line: Int): Token = BooleanToken(text, false, line)
+    },
+    NULL("null") {
+        override fun token(text: String, line: Int): Token = NullToken(text, false, line)
     };
 
     companion object {

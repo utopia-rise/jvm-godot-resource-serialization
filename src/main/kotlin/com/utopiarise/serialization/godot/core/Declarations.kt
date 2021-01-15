@@ -19,6 +19,7 @@ class NumberDeclaration(token: IdentifierToken?, value: Double) : Declaration(to
 
 class StringDeclaration(token: IdentifierToken?, value: String) : Declaration(token, value)
 class BooleanDeclaration(token: IdentifierToken?, value: Boolean) : Declaration(token, value)
+class NullDeclaration(token: IdentifierToken?) : Declaration(token)
 class ArrayDeclaration(token: IdentifierToken?, vararg values: Declaration) : Declaration(token, *values)
 class DictionaryDeclaration(token: IdentifierToken?, vararg values: Pair<Declaration, Declaration>) : Declaration(token, *values)
 

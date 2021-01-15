@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scene/Lights.gd" type="Script" id=1]
+[ext_resource path="res://scene/FallingLight.tscn" type="PackedScene" id=2]
+
+[node name="Lights" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24.6196, 0 )
+script = ExtResource( 1 )
+fallingLightPackedScene = ExtResource( 2 )
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 10, 0, 10 )
+light_color = Color( 0.513726, 0, 0.721569, 1 )
+light_energy = 2.0
+spot_range = 30.0
+spot_angle = 35.0
+
+[node name="SpotLight2" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 10, 0, -10 )
+light_color = Color( 0.513726, 0, 0.721569, 1 )
+light_energy = 2.0
+spot_range = 30.0
+spot_angle = 35.0
+
+[node name="SpotLight3" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -10, 0, 10 )
+light_color = Color( 0.513726, 0, 0.721569, 1 )
+light_energy = 2.0
+spot_range = 30.0
+spot_angle = 35.0
+
+[node name="SpotLight4" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -10, 0, -10 )
+light_color = Color( 0.513726, 0, 0.721569, 1 )
+light_energy = 2.0
+spot_range = 30.0
+spot_angle = 35.0

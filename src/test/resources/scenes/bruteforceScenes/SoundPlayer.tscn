@@ -1,0 +1,18 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://singleton/SoundPlayer.gd" type="Script" id=1]
+[ext_resource path="res://asset/music/Stage2.ogg" type="AudioStream" id=2]
+[ext_resource path="res://asset/music/Stage3.ogg" type="AudioStream" id=3]
+[ext_resource path="res://asset/music/Stage3_Intro.ogg" type="AudioStream" id=4]
+[ext_resource path="res://asset/music/Stage1.ogg" type="AudioStream" id=5]
+[ext_resource path="res://asset/music/Menu.ogg" type="AudioStream" id=6]
+
+[node name="SoundPlayer" type="Node"]
+script = ExtResource( 1 )
+audioStreamPlayerNodePath = NodePath("AudioStreamPlayer")
+audioStreams = [ ExtResource( 5 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 6 ) ]
+intros = [ null, null, ExtResource( 4 ), null ]
+mainMenuMusic = ExtResource( 6 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"

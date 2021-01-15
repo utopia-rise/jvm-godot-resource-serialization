@@ -173,7 +173,13 @@ internal class SceneDeserializer {
     } else {
         val nodePathSegments = nodeName.split("/")
         val node = nodePathSegments.last()
-        val parent = nodePathSegments.getOrNull(nodePathSegments.size - 2) ?: "."
+        val parent = nodePathSegments.subList(0, nodePathSegments.size - 1).let {
+            if (it.isEmpty()) {
+                "."
+            } else {
+                it.joinToString("/")
+            }
+        }
         nodes.first {
             it.parent == parent && it.name == node
         }
