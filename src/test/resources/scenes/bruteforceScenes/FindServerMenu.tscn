@@ -1,0 +1,106 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/theme/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://ui/menu/findserver/FindServerMenu.gd" type="Script" id=2]
+
+
+[node name="FindServerMenuControl" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="InformationLabelMarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 1024.0
+margin_bottom = 89.0
+custom_constants/margin_right = 50
+custom_constants/margin_top = 50
+custom_constants/margin_left = 50
+custom_constants/margin_bottom = 20
+
+[node name="InformationLabel" type="Label" parent="VBoxContainer/InformationLabelMarginContainer"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 974.0
+margin_bottom = 69.0
+text = "findServerMenu_info_label"
+align = 1
+
+[node name="ManualConnectionMarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 93.0
+margin_right = 1024.0
+margin_bottom = 122.0
+custom_constants/margin_right = 50
+custom_constants/margin_left = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ManualConnectionMarginContainer"]
+margin_left = 50.0
+margin_right = 974.0
+margin_bottom = 29.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 73.0
+margin_bottom = 24.0
+text = "ipAddress"
+
+[node name="IpAddressLineEdit" type="LineEdit" parent="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer"]
+margin_left = 83.0
+margin_right = 333.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 250, 0 )
+focus_neighbour_right = NodePath("../ConnectButton")
+focus_neighbour_bottom = NodePath("../../../MarginContainer/HostItemList")
+focus_next = NodePath("../ConnectButton")
+placeholder_text = "192.168.x.xxx"
+
+[node name="ConnectButton" type="Button" parent="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer"]
+margin_left = 343.0
+margin_right = 589.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+focus_neighbour_left = NodePath("../IpAddressLineEdit")
+focus_neighbour_right = NodePath("../BackButton")
+focus_neighbour_bottom = NodePath("../../../MarginContainer/HostItemList")
+focus_next = NodePath("../BackButton")
+focus_previous = NodePath("../IpAddressLineEdit")
+disabled = true
+text = "findServerMenu_connect_button"
+
+[node name="BackButton" type="Button" parent="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer"]
+margin_left = 824.0
+margin_right = 924.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+focus_neighbour_left = NodePath("../ConnectButton")
+focus_neighbour_bottom = NodePath("../../../MarginContainer/HostItemList")
+focus_next = NodePath("../../../MarginContainer/HostItemList")
+focus_previous = NodePath("../ConnectButton")
+size_flags_horizontal = 10
+text = "back"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 126.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_vertical = 3
+custom_constants/margin_top = 20
+
+[node name="HostItemList" type="ItemList" parent="VBoxContainer/MarginContainer"]
+margin_top = 20.0
+margin_right = 1024.0
+margin_bottom = 474.0
+focus_neighbour_left = NodePath("../../ManualConnectionMarginContainer/HBoxContainer/ConnectButton")
+focus_neighbour_top = NodePath("../../ManualConnectionMarginContainer/HBoxContainer/IpAddressLineEdit")
+focus_neighbour_right = NodePath("../../ManualConnectionMarginContainer/HBoxContainer/BackButton")
+focus_previous = NodePath("../../ManualConnectionMarginContainer/HBoxContainer/IpAddressLineEdit")
+size_flags_vertical = 3
+[connection signal="text_changed" from="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer/IpAddressLineEdit" to="." method="_on_IpAddressLineEdit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer/ConnectButton" to="." method="_on_ConnectButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ManualConnectionMarginContainer/HBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="item_selected" from="VBoxContainer/MarginContainer/HostItemList" to="." method="_on_HostItemList_item_selected"]

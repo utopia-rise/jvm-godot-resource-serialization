@@ -1,0 +1,89 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://pickups/battery/BaseBattery.gd" type="Script" id=1]
+[ext_resource path="res://pickups/battery/states/BatteryStateMachine.gd" type="Script" id=2]
+[ext_resource path="res://pickups/battery/states/OriginCantPickUpState.gd" type="Script" id=3]
+[ext_resource path="res://pickups/battery/states/AllCanPickUpState.gd" type="Script" id=4]
+[ext_resource path="res://pickups/battery/states/PickedUpState.gd" type="Script" id=5]
+[ext_resource path="res://pickups/battery/resources/battery_spriteframes.tres" type="SpriteFrames" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 28, 14 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 28, 14 )
+
+[node name="BaseBattery" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 5
+gravity_scale = 3.0
+script = ExtResource( 1 )
+
+[node name="StateMachine" type="Node2D" parent="."]
+script = ExtResource( 2 )
+initialState = NodePath("OriginCantPickUpState")
+originCantPickUp = NodePath("OriginCantPickUpState")
+allCanPickUp = NodePath("AllCanPickUpState")
+pickedUp = NodePath("PickedUpState")
+
+[node name="OriginCantPickUpState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 3 )
+timerNodePath = NodePath("../../Timer")
+collisionAreaNodePath = NodePath("../../Area2D")
+
+[node name="AllCanPickUpState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 4 )
+collisionAreaNodePath = NodePath("../../Area2D")
+
+[node name="PickedUpState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 5 )
+animatedSpriteNodePath = NodePath("../../AnimatedSprite")
+energyLabelNodePath = NodePath("../../Control/AddedEnergyLabel")
+tweenNodePath = NodePath("../../Control/AddedEnergyLabel/TextAnimationTween")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+frames = ExtResource( 6 )
+frame = 13
+playing = true
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )
+
+[node name="Control" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -19.0
+margin_top = -54.0
+margin_right = 21.0
+margin_bottom = -14.0
+
+[node name="AddedEnergyLabel" type="Label" parent="Control"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -14.0
+margin_right = 20.0
+grow_horizontal = 2
+custom_colors/font_color = Color( 0.0588235, 1, 0, 1 )
+text = "+20"
+align = 1
+valign = 2
+
+[node name="TextAnimationTween" type="Tween" parent="Control/AddedEnergyLabel"]

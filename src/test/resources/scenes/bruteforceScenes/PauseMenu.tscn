@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Ui/Menu/PauseMenu/PauseMenuManager.cs" type="Script" id=1]
+[ext_resource path="res://Ui/Menu/PauseMenu/Assets/pause_title_font.tres" type="DynamicFont" id=2]
+
+[node name="PauseMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+continueButtonNodePath = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/ContinueButton")
+finishGameButtonNodePath = NodePath("VBoxContainer/VBoxContainer/MarginContainer3/FinishGameButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.854902 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 107.0
+margin_right = 1280.0
+margin_bottom = 250.0
+size_flags_horizontal = 5
+size_flags_vertical = 6
+custom_constants/margin_right = 50
+custom_constants/margin_top = 50
+custom_constants/margin_left = 50
+custom_constants/margin_bottom = 50
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 1230.0
+margin_bottom = 93.0
+custom_fonts/font = ExtResource( 2 )
+text = "pause_menu_title"
+align = 1
+uppercase = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 362.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 68.0
+size_flags_horizontal = 5
+size_flags_vertical = 4
+custom_constants/margin_right = 50
+custom_constants/margin_top = 20
+custom_constants/margin_left = 50
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer/VBoxContainer/MarginContainer2"]
+margin_left = 50.0
+margin_top = 20.0
+margin_right = 1230.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 48 )
+text = "pause_menu_continue"
+flat = true
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+margin_top = 72.0
+margin_right = 1280.0
+margin_bottom = 140.0
+size_flags_horizontal = 5
+size_flags_vertical = 4
+custom_constants/margin_right = 50
+custom_constants/margin_left = 50
+custom_constants/margin_bottom = 20
+
+[node name="FinishGameButton" type="Button" parent="VBoxContainer/VBoxContainer/MarginContainer3"]
+margin_left = 50.0
+margin_right = 1230.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 0, 48 )
+text = "pause_menu_finish_game"
+flat = true

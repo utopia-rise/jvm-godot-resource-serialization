@@ -1,0 +1,133 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://Entities/DemonEntity/Demon.cs" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Entities/Common/Movement/EntityMovement.cs" type="Script" id=3]
+[ext_resource path="res://Entities/DemonEntity/MovePositionFinder.cs" type="Script" id=4]
+[ext_resource path="res://Entities/DemonEntity/Particles/DemonCanvasItemMaterial.tres" type="Material" id=5]
+[ext_resource path="res://Entities/DemonEntity/Particles/DemonParticlesMaterial.tres" type="Material" id=6]
+[ext_resource path="res://Entities/DemonEntity/Particles/Textures/smoke_spriteSheet.png" type="Texture" id=7]
+[ext_resource path="res://Entities/DemonEntity/DemonBehaviourTree.cs" type="Script" id=8]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonIdleBehaviour.cs" type="Script" id=9]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonWanderRandomPositionBehaviour.cs" type="Script" id=10]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonWanderInsideBehaviour.cs" type="Script" id=11]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonWanderOutsideBehaviour.cs" type="Script" id=12]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonInfestRandomTreeBehaviour.cs" type="Script" id=13]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonInfestTreeThatPlayerCantReachBehaviour.cs" type="Script" id=14]
+[ext_resource path="res://Entities/DemonEntity/Behaviours/DemonInfestTreeWithBestDistanceToHealthRationBehaviour.cs" type="Script" id=15]
+[ext_resource path="res://Entities/DemonEntity/DemonStateMachine.cs" type="Script" id=16]
+[ext_resource path="res://Entities/DemonEntity/States/DemonIdleState.cs" type="Script" id=17]
+[ext_resource path="res://Entities/DemonEntity/States/DemonMoveToPositionState.cs" type="Script" id=18]
+[ext_resource path="res://SoundEngine/Assets/Sfx/deamon_walk.ogg" type="AudioStream" id=19]
+[ext_resource path="res://Entities/DemonEntity/States/DemonInfestTreeState.cs" type="Script" id=20]
+[ext_resource path="res://SoundEngine/Assets/Sfx/infect_tree.wav" type="AudioStream" id=21]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 12.8273
+
+[node name="Demon" type="KinematicBody2D" groups=[
+"demon",
+]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 1 )
+entityMovementNodePath = NodePath("Movement")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="InvisibleSprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+texture = ExtResource( 2 )
+
+[node name="Movement" type="Node2D" parent="."]
+script = ExtResource( 3 )
+entityBodyNodePath = NodePath("..")
+
+[node name="MoveToPositionFinder" type="Node2D" parent="Movement"]
+script = ExtResource( 4 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+material = ExtResource( 5 )
+amount = 50
+lifetime = 0.5
+randomness = 1.0
+visibility_rect = Rect2( -64, -64, 128, 128 )
+local_coords = false
+draw_order = 1
+process_material = ExtResource( 6 )
+texture = ExtResource( 7 )
+
+[node name="BehaviourTree" type="Node2D" parent="."]
+script = ExtResource( 8 )
+idleBehaviourNodePath = NodePath("IdleBehaviour")
+wanderOutsideBehaviourNodePath = NodePath("WanderOutsideBehaviour")
+wanderInsideBehaviourNodePath = NodePath("WanderInsideBehaviour")
+wanderRandomBehaviourNodePath = NodePath("WanderRandomBehaviour")
+infestRandomTreeBehaviourNodePath = NodePath("InfestRandomBehaviour")
+infestTreeThatPlayerCantReachBehaviourNodePath = NodePath("InfestPlayerCantReachBehaviour")
+infestTreeWithBestDistanceToHealthBehaviourNodePath = NodePath("InfestBestRatioBehaviour")
+movePositionFinderNodePath = NodePath("../Movement/MoveToPositionFinder")
+
+[node name="IdleBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 9 )
+stateMachineNodePath = NodePath("../../StateMachine")
+
+[node name="WanderRandomBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 10 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+
+[node name="WanderInsideBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 11 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+
+[node name="WanderOutsideBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 12 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+
+[node name="InfestRandomBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 13 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+timerNodePath = NodePath("../../InfestTimer")
+
+[node name="InfestPlayerCantReachBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 14 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+timerNodePath = NodePath("../../InfestTimer")
+
+[node name="InfestBestRatioBehaviour" type="Node2D" parent="BehaviourTree"]
+script = ExtResource( 15 )
+stateMachineNodePath = NodePath("../../StateMachine")
+movePositionFinderNodePath = NodePath("../../Movement/MoveToPositionFinder")
+timerNodePath = NodePath("../../InfestTimer")
+
+[node name="StateMachine" type="Node2D" parent="." groups=[
+"state_machine",
+]]
+script = ExtResource( 16 )
+initialStateNodePath = NodePath("IdleState")
+idle = NodePath("IdleState")
+moveToPosition = NodePath("MoveToPositionState")
+infestTree = NodePath("InfestTreeState")
+
+[node name="IdleState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 17 )
+
+[node name="MoveToPositionState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 18 )
+entityMovementNodePath = NodePath("../../Movement")
+deamonWalkSound = ExtResource( 19 )
+
+[node name="InfestTreeState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 20 )
+entityMovementNodePath = NodePath("../../Movement")
+deamonWalkSound = ExtResource( 19 )
+infestTreeSound = ExtResource( 21 )
+
+[node name="InfestTimer" type="Timer" parent="."]
+one_shot = true

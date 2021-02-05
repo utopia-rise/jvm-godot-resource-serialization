@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scene/Speakers.gd" type="Script" id=1]
+[ext_resource path="res://scene/Speaker.tscn" type="PackedScene" id=2]
+
+[node name="Speakers" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Speaker" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.902976, 0, 0.429692, 0, 1.80221, 0, -0.429692, 0, 0.902976, -14.838, 1.793, -13.345 )
+
+[node name="Speaker2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.902976, 0, -0.429692, 0, 1.80221, 0, 0.429692, 0, 0.902976, 14.838, 1.793, -13.345 )
+
+[node name="Speaker12" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1.80221, 0, -1, 0, -1.62921e-07, -19.0004, 1.793, -6.42073 )
+
+[node name="Speaker13" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1.80221, 0, -1, 0, -1.62921e-07, -19.0003, 1.793, 1.75807 )
+
+[node name="Speaker15" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1.80221, 0, 3.25841e-07, 0, -1, -10.2552, 1.793, 19.0002 )
+
+[node name="Speaker16" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1.80221, 0, 3.25841e-07, 0, -1, -1.58599, 1.793, 19.0002 )
+
+[node name="Speaker17" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1.80221, 0, 3.25841e-07, 0, -1, 8.21788, 1.793, 19.0002 )
+
+[node name="Speaker14" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1.80221, 0, -1, 0, -1.62921e-07, -19.0003, 1.793, 9.69758 )
+
+[node name="Speaker6" parent="." instance=ExtResource( 2 )]
+transform = Transform( -0.754114, 0, 0.656744, 0, 1.80221, 0, -0.656744, 0, -0.754114, -18.2535, 1.793, 17.9775 )
+
+[node name="Speaker7" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, -1, 0, 1.80221, 0, 1, 0, -1.62921e-07, 18.9672, 1.793, -6.42073 )
+
+[node name="Speaker8" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, -1, 0, 1.80221, 0, 1, 0, -1.62921e-07, 18.9672, 1.793, 1.75807 )
+
+[node name="Speaker9" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1.62921e-07, 0, -1, 0, 1.80221, 0, 1, 0, -1.62921e-07, 18.9672, 1.793, 9.69758 )
+
+[node name="Speaker10" parent="." instance=ExtResource( 2 )]
+transform = Transform( -0.722026, 0, -0.691866, 0, 1.80221, 0, 0.691866, 0, -0.722026, 18.5001, 1.793, 18.5975 )

@@ -1,0 +1,135 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Levels/Common/TileMapObjects/BaseObject/BaseTileMapObject.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeTileMapObject.cs" type="Script" id=2]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Ui/InteractionPopup.tscn" type="PackedScene" id=3]
+[ext_resource path="res://SoundEngine/Assets/Sfx/tree_kill.wav" type="AudioStream" id=4]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeState.cs" type="Script" id=5]
+[ext_resource path="res://Levels/Common/TileMapObjects/BaseObject/TransparencyManager.cs" type="Script" id=6]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeActionRadius.cs" type="Script" id=7]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/treeCircle_green.svg" type="Texture" id=8]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/treeCircle_red.svg" type="Texture" id=9]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeStateMachine.cs" type="Script" id=10]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeStates/GrowingState.cs" type="Script" id=11]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Effects/TreeAddEnergyParticleEffect.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeStates/FullyGrownState.cs" type="Script" id=13]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeStates/InfestedState.cs" type="Script" id=14]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/TreeStates/DeadState.cs" type="Script" id=15]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Assets/tree.png" type="Texture" id=16]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 64.5147, 193.346 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 326.4
+
+[node name="TreeTileMapObject" instance=ExtResource( 1 )]
+z_index = 200
+script = ExtResource( 2 )
+hoverIndicatorNodePath = NodePath("Hover/HoverIndicator")
+actionRadiusNodePath = NodePath("TreeActionRadius")
+stateMachineNodePath = NodePath("TreeStateMachine")
+treeStateNodePath = NodePath("TreeState")
+interactionPopupPackedScene = ExtResource( 3 )
+killTreeSound = ExtResource( 4 )
+
+[node name="TreeState" type="Node2D" parent="." index="0"]
+script = ExtResource( 5 )
+
+[node name="Hover" parent="." index="1"]
+editor/display_folded = true
+visible = false
+
+[node name="TransparencyManager" type="Area2D" parent="." index="2"]
+scale = Vector2( 0.05, 0.05 )
+collision_layer = 8
+collision_mask = 6
+script = ExtResource( 6 )
+spriteNodePath = NodePath("../Sprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransparencyManager" index="0"]
+position = Vector2( 0, -190 )
+shape = SubResource( 1 )
+
+[node name="TreeActionRadius" type="Area2D" parent="." index="3" groups=[
+"actionRadius",
+]]
+collision_layer = 8
+collision_mask = 14
+script = ExtResource( 7 )
+textureNodePath = NodePath("Sprite")
+healthyTexture = ExtResource( 8 )
+infestedTexture = ExtResource( 9 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TreeActionRadius" index="0"]
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="TreeActionRadius" index="1"]
+modulate = Color( 1, 1, 1, 0.188235 )
+scale = Vector2( 3.25, 3.25 )
+z_index = -20
+texture = ExtResource( 8 )
+
+[node name="TreeStateMachine" type="Node2D" parent="." index="4" groups=[
+"state_machine",
+]]
+script = ExtResource( 10 )
+initialStateNodePath = NodePath("GrowingState")
+growing = NodePath("GrowingState")
+fullGrown = NodePath("FullyGrownState")
+infested = NodePath("InfestedState")
+dead = NodePath("DeadState")
+
+[node name="GrowingState" type="Node2D" parent="TreeStateMachine" index="0"]
+script = ExtResource( 11 )
+treeStateNodePath = NodePath("../../TreeState")
+treeSpriteNodePath = NodePath("../../Sprite")
+transparencyCollisionShapeNodePath = NodePath("../../TransparencyManager/CollisionShape2D")
+treeGrowthTimerNodePath = NodePath("TreeGrowthTimer")
+pointTimerNodePath = NodePath("PointTimer")
+addEnergyTimerNodePath = NodePath("AddEnergyTimer")
+treeActionRadiusNodePath = NodePath("../../TreeActionRadius")
+addEnergyParticleEffectPackedScene = ExtResource( 12 )
+
+[node name="TreeGrowthTimer" type="Timer" parent="TreeStateMachine/GrowingState" index="0"]
+
+[node name="PointTimer" type="Timer" parent="TreeStateMachine/GrowingState" index="1"]
+
+[node name="AddEnergyTimer" type="Timer" parent="TreeStateMachine/GrowingState" index="2"]
+
+[node name="FullyGrownState" type="Node2D" parent="TreeStateMachine" index="1"]
+script = ExtResource( 13 )
+pointTimerNodePath = NodePath("PointTimer")
+addEnergyTimerNodePath = NodePath("AddEnergyTimer")
+treeActionRadiusNodePath = NodePath("../../TreeActionRadius")
+treeStateNodePath = NodePath("../../TreeState")
+addEnergyParticleEffectPackedScene = ExtResource( 12 )
+
+[node name="PointTimer" type="Timer" parent="TreeStateMachine/FullyGrownState" index="0"]
+
+[node name="AddEnergyTimer" type="Timer" parent="TreeStateMachine/FullyGrownState" index="1"]
+
+[node name="InfestedState" type="Node2D" parent="TreeStateMachine" index="2"]
+script = ExtResource( 14 )
+pointTimerNodePath = NodePath("PointTimer")
+damageTimerNodePath = NodePath("DamageTimer")
+addEnergyTimerNodePath = NodePath("AddEnergyTimer")
+treeActionRadiusNodePath = NodePath("../../TreeActionRadius")
+treeStateNodePath = NodePath("../../TreeState")
+addEnergyParticleEffectPackedScene = ExtResource( 12 )
+
+[node name="PointTimer" type="Timer" parent="TreeStateMachine/InfestedState" index="0"]
+
+[node name="DamageTimer" type="Timer" parent="TreeStateMachine/InfestedState" index="1"]
+
+[node name="AddEnergyTimer" type="Timer" parent="TreeStateMachine/InfestedState" index="2"]
+
+[node name="DeadState" type="Node2D" parent="TreeStateMachine" index="3"]
+position = Vector2( 0.735107, 0 )
+script = ExtResource( 15 )
+
+[node name="Sprite" type="Sprite" parent="." index="5"]
+self_modulate = Color( 0, 0.623529, 0.133333, 1 )
+scale = Vector2( 0.05, 0.05 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -220 )

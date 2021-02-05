@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Ui/MainTheme.tres" type="Theme" id=1]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Ui/InteractionPopup.cs" type="Script" id=2]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Ui/InteractionOption.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Assets/ ic_skull.png" type="Texture" id=4]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Assets/ic_heart.png" type="Texture" id=5]
+
+[node name="PopupPanel" type="PopupPanel"]
+margin_right = 8.0
+margin_bottom = 8.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+killTreeInteractionObjectNodePath = NodePath("MarginContainer/GridContainer/KillTreeOption")
+healTreeInteractionObjectNodePath = NodePath("MarginContainer/GridContainer/HealTreeOption")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 18.0
+margin_bottom = 18.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 5.0
+margin_bottom = 5.0
+columns = 3
+
+[node name="KillTreeOption" parent="MarginContainer/GridContainer" instance=ExtResource( 3 )]
+margin_right = 64.0
+margin_bottom = 82.0
+labelKey = "kill_tree"
+icon = ExtResource( 4 )
+textureRectNodePath = NodePath("../KillTreeOption/TextureRect")
+labelNodePath = NodePath("../KillTreeOption/Label")
+
+[node name="HealTreeOption" parent="MarginContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 82.0
+labelKey = "heal_tree"
+icon = ExtResource( 5 )
+textureRectNodePath = NodePath("../HealTreeOption/TextureRect")
+labelNodePath = NodePath("../HealTreeOption/Label")

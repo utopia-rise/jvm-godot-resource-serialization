@@ -1,5 +1,0 @@
-os: linux
-language: kotlin
-
-script:
-  - ./gradlew build

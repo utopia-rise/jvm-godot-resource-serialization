@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Spatial.cs" type="Script" id=1]
+[ext_resource path="res://GdScript.gd" type="Script" id=2]
+
+[node name="cSharp" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="GdScript" type="Spatial" parent="."]
+script = ExtResource( 2 )
+
+[node name="Node" type="Node" parent="."]
+
+[node name="Node" type="Node" parent="Node"]
+
+[node name="TestParent" type="Node" parent="Node/Node"]
+
+[node name="TestChild" type="Node" parent="Node/Node/TestParent"]
+
+[node name="Node2" type="Node" parent="Node"]
+
+[node name="TestParent" type="Node" parent="Node/Node2"]
+
+[node name="TestChild" type="Node" parent="Node/Node2/TestParent"]
+[connection signal="tree_entered" from="." to="." method="_on_Spatial_tree_entered"]
+[connection signal="tree_entered" from="GdScript" to="GdScript" method="_on_GdScript_tree_entered"]

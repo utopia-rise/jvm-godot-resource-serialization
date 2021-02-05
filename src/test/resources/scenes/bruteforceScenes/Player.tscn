@@ -1,0 +1,230 @@
+[gd_scene load_steps=26 format=2]
+
+[ext_resource path="res://entities/player/scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://entities/player/scripts/PlayerState.gd" type="Script" id=2]
+[ext_resource path="res://entities/player/scripts/Energy.gd" type="Script" id=3]
+[ext_resource path="res://entities/player/scripts/EnergyRegainTimer.gd" type="Script" id=4]
+[ext_resource path="res://entities/player/states/PlayerStateMachine.gd" type="Script" id=5]
+[ext_resource path="res://entities/player/states/MovementState.gd" type="Script" id=6]
+[ext_resource path="res://entities/player/states/IdleState.gd" type="Script" id=7]
+[ext_resource path="res://entities/player/states/RunningState.gd" type="Script" id=8]
+[ext_resource path="res://entities/player/states/AirState.gd" type="Script" id=9]
+[ext_resource path="res://entities/player/WallState.gd" type="Script" id=10]
+[ext_resource path="res://entities/player/particles/sliding/sliding_particles.tres" type="Material" id=11]
+[ext_resource path="res://entities/player/particles/sliding/sliding_spark.png" type="Texture" id=12]
+[ext_resource path="res://entities/player/states/Dash.gd" type="Script" id=13]
+[ext_resource path="res://entities/player/particles/dash_bodyTrail_particles.tres" type="Material" id=14]
+[ext_resource path="res://entities/player/texture/body/char_static.png" type="Texture" id=15]
+[ext_resource path="res://entities/player/particles/smoke_particles.tres" type="Material" id=16]
+[ext_resource path="res://entities/player/particles/smoke_spriteSheet.png" type="Texture" id=17]
+[ext_resource path="res://entities/player/states/DeadState.gd" type="Script" id=18]
+[ext_resource path="res://entities/player/WallDetector.gd" type="Script" id=19]
+[ext_resource path="res://entities/player/scripts/WeaponSlot.gd" type="Script" id=20]
+[ext_resource path="res://weapons/StandardWeapon.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/player/texture/energy/energy_horn_full.png" type="Texture" id=22]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 3
+particles_anim_loop = false
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 29.9574
+height = 41.8446
+
+[node name="Player" type="KinematicBody2D" groups=[
+"cameraTarget",
+"player",
+]]
+collision_layer = 2
+script = ExtResource( 1 )
+
+[node name="PlayerState" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Scripts" type="Node" parent="."]
+
+[node name="Energy" type="Node" parent="Scripts"]
+script = ExtResource( 3 )
+playerStateNodePath = NodePath("../../PlayerState")
+stateMachineNodePath = NodePath("../../StateMachine")
+energyHornRightNodePath = NodePath("../../UiControl/HornRightTextureProgress")
+energyHornLeftNodePath = NodePath("../../UiControl/HornLeftTextureProgress")
+
+[node name="EnergyRegainTimer" type="Timer" parent="Scripts/Energy"]
+wait_time = 5.0
+autostart = true
+script = ExtResource( 4 )
+playerStateNodePath = NodePath("../../../PlayerState")
+
+[node name="StateMachine" type="Node2D" parent="."]
+script = ExtResource( 5 )
+initialState = NodePath("MovementState/IdleState")
+movement = NodePath("MovementState")
+idle = NodePath("MovementState/IdleState")
+running = NodePath("MovementState/RunningState")
+air = NodePath("MovementState/AirState")
+wall = NodePath("MovementState/WallState")
+dash = NodePath("Dash")
+dead = NodePath("DeadState")
+
+[node name="MovementState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 6 )
+playerStateNodePath = NodePath("../../PlayerState")
+dashStateNodePath = NodePath("../Dash")
+
+[node name="IdleState" type="Node2D" parent="StateMachine/MovementState"]
+script = ExtResource( 7 )
+playerStateNodePath = NodePath("../../../PlayerState")
+
+[node name="RunningState" type="Node2D" parent="StateMachine/MovementState"]
+script = ExtResource( 8 )
+playerStateNodePath = NodePath("../../../PlayerState")
+
+[node name="AirState" type="Node2D" parent="StateMachine/MovementState"]
+script = ExtResource( 9 )
+playerStateNodePath = NodePath("../../../PlayerState")
+wallDetectorNodePath = NodePath("../../../WallDetector")
+
+[node name="WallState" type="Node2D" parent="StateMachine/MovementState"]
+script = ExtResource( 10 )
+playerStateNodePath = NodePath("../../../PlayerState")
+wallDetectorNodePath = NodePath("../../../WallDetector")
+
+[node name="SlidingParticlesTop" type="Particles2D" parent="StateMachine/MovementState/WallState"]
+material = SubResource( 1 )
+position = Vector2( 30, -25 )
+rotation = 4.36332
+emitting = false
+amount = 20
+lifetime = 0.2
+process_material = ExtResource( 11 )
+texture = ExtResource( 12 )
+
+[node name="SlidingParticlesBottom" type="Particles2D" parent="StateMachine/MovementState/WallState"]
+material = SubResource( 1 )
+position = Vector2( 30, 25 )
+rotation = 4.36332
+emitting = false
+amount = 20
+lifetime = 0.2
+process_material = ExtResource( 11 )
+texture = ExtResource( 12 )
+
+[node name="Dash" type="Node2D" parent="StateMachine"]
+script = ExtResource( 13 )
+dashTrailParticlesNodePath = NodePath("DashTrailParticles")
+dashSmokeParticlesNodePath = NodePath("DashSmoke")
+dashTimerNodePath = NodePath("DashTimer")
+cooldownTimerNodePath = NodePath("DashCooldown")
+playerStateNodePath = NodePath("../../PlayerState")
+weaponSlotNodePath = NodePath("../../WeaponSlot")
+
+[node name="DashTimer" type="Timer" parent="StateMachine/Dash"]
+wait_time = 0.5
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="StateMachine/Dash"]
+wait_time = 0.5
+one_shot = true
+
+[node name="DashTrailParticles" type="Particles2D" parent="StateMachine/Dash"]
+show_behind_parent = true
+emitting = false
+amount = 100
+speed_scale = 2.0
+visibility_rect = Rect2( -25, -50, 50, 100 )
+local_coords = false
+process_material = ExtResource( 14 )
+texture = ExtResource( 15 )
+
+[node name="DashSmoke" type="Particles2D" parent="StateMachine/Dash"]
+show_behind_parent = true
+material = SubResource( 2 )
+position = Vector2( -25, -50 )
+scale = Vector2( 0.5, 0.5 )
+emitting = false
+amount = 85
+lifetime = 0.1
+randomness = 1.0
+local_coords = false
+process_material = ExtResource( 16 )
+texture = ExtResource( 17 )
+
+[node name="DeadState" type="Node2D" parent="StateMachine"]
+script = ExtResource( 18 )
+tweenNodePath = NodePath("Tween")
+
+[node name="Tween" type="Tween" parent="StateMachine/DeadState"]
+
+[node name="WallDetector" type="Node2D" parent="."]
+script = ExtResource( 19 )
+
+[node name="TopRight" type="RayCast2D" parent="WallDetector"]
+position = Vector2( 0, -25 )
+enabled = true
+cast_to = Vector2( 35, 0 )
+
+[node name="TopLeft" type="RayCast2D" parent="WallDetector"]
+position = Vector2( 0, -25 )
+scale = Vector2( -1, 1 )
+enabled = true
+cast_to = Vector2( 35, 0 )
+
+[node name="BottomRight" type="RayCast2D" parent="WallDetector"]
+position = Vector2( 0, 25 )
+enabled = true
+cast_to = Vector2( 35, 0 )
+
+[node name="BottomLeft" type="RayCast2D" parent="WallDetector"]
+position = Vector2( 0, 25 )
+scale = Vector2( -1, 1 )
+enabled = true
+cast_to = Vector2( 35, 0 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -1 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 15 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -1 )
+shape = SubResource( 3 )
+
+[node name="WeaponSlot" type="Node2D" parent="."]
+script = ExtResource( 20 )
+defaultWeapon = ExtResource( 21 )
+
+[node name="UiControl" type="Control" parent="."]
+margin_top = -52.0
+margin_bottom = -52.0
+
+[node name="HornRightTextureProgress" type="TextureProgress" parent="UiControl"]
+margin_left = 9.34449
+margin_top = -30.8285
+margin_right = 166.344
+margin_bottom = 487.172
+rect_scale = Vector2( 0.08, 0.08 )
+value = 100.0
+texture_progress = ExtResource( 22 )
+fill_mode = 3
+
+[node name="HornLeftTextureProgress" type="TextureProgress" parent="UiControl"]
+margin_left = -1.7474
+margin_top = -30.8285
+margin_right = 155.253
+margin_bottom = 487.172
+rect_scale = Vector2( -0.08, 0.08 )
+value = 100.0
+texture_progress = ExtResource( 22 )
+fill_mode = 3
+[connection signal="timeout" from="Scripts/Energy/EnergyRegainTimer" to="Scripts/Energy/EnergyRegainTimer" method="_on_EnergyRegainTimer_timeout"]
+[connection signal="timeout" from="StateMachine/Dash/DashCooldown" to="StateMachine/Dash" method="_on_dash_cooldown_time_out"]

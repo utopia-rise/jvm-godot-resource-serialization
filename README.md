@@ -1,29 +1,25 @@
 # JVM Serialization API for godot resources (WIP)
 
-This project is designed to make some serialization operations for Godot resources, on the JVM.  
-It is written in Kotlin, and no Java source should go in it !
+## Overview
+This project allows one to deserialize Godot resources into kotlin classes.  
+It allows you to define your static item data as Godot resources (`tres` files) and be able to use those resources not
+only on the client, but also on your jvm based application (Server, Tool, ...).  
+It uses reflection to inject the resource data into your kotlin classes (like Jackson for json and xml based data).
 
-![kotlin-approval]
+## Status
+This project is currently a work in progress, and only supports deserialization. For now, it does
+not support internal resources.
 
-This project is currently a work in progress, and only support deserialization. For now it does
-not support internal resources (it will be added).
-
-We thank Bob Nystrom for his book [crafting interpreters](https://craftinginterpreters.com/), which has inspired our code.
-
-## Project's goal
-
-If you are a java user and a Godot game developer, this project might feet some of your needs.  
-Imagine you build a game with godot, with some static data, registered as Godot resource (tres). On an other side, you
-have a java application (multi-player server, spring rest service, ...) and want this java application to use those
-resource as JVM objects. This project is made for you !  
-It provide a deserializer for godot resource data format, using reflexion to inject data into your class instance, like
-you can do with json using Jackson.
+## Roadmap / Todo:
+- Internal resources support
+- Serialization from JVM to Godot resources
+- AllArgs constructor deserialization
 
 ## Usage
+The base requirement for this project to work is, that you keep your models between GDScript and Kotlin in sync.  
+Let's assume you have an Item Godot resource like this :
 
-The only thing you have to is to insure your data models between Java/Kotlin and GDScript are the same.
-Let admit you have an Item Godot resource like this :
-
+### Model layout
 ```gdscript
 extends Resource
 
@@ -49,39 +45,24 @@ export(int) var width: int
 export(int) var height: int
 ```
 
-You should have the JVM equivalent :
-
+You should have a equivalent JVM model:
 ```kotlin
-data class Item(var id: Int,
-                    var attributes: Array<Int>,
-                    var category: Int,
-                    var description: String,
-                    var item_name: String,
-                    var price: Int,
-                    var shop: Int,
-                    var width: Int,
-                    var height: Int) {
-    constructor(): this(-1, arrayOf(), -1, "", "", -1, -1, -1, -1)
-
-    override fun hashCode(): Int {
-        return id
-    }
-    
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-    
-        other as TestItem
-    
-        if (id != other.id) return false
-    
-        return true
-    }
+data class Item(
+    var id: Int,
+    var attributes: List<Int>,
+    var category: Int,
+    var description: String,
+    var item_name: String,
+    var price: Int,
+    var shop: Int,
+    var width: Int,
+    var height: Int
+) {
+    constructor() : this(-1, arrayOf(), -1, "", "", -1, -1, -1, -1)
 }
 ```
 
-If I have an ItemDatabase that refers to Item, you should have in GDScript:
-
+If you have an ItemDatabase that refers to Item, your GDScript model should look like this:
 ```gdscript
 extends Resource
 
@@ -90,21 +71,18 @@ class_name ItemDatabase
 export(Dictionary) var database: Dictionary
 ```
 
-And on JVM side :
-
+And on JVM side:
 ```kotlin
 data class ItemDB(var database: Map<Int, Item>) {
-    constructor(): this(HashMap())
+    constructor(): this(mapOf())
 }
 ```
 
-Notice that you should have setters accessible and provide a NoArg constructor. AllArg constructor initialization will
-be added later.
+The above example can be found in the tests [here](src/it/resources/data/common/item_db.tres).  
+**Note:** You should have setters accessible and provide a NoArg constructor. AllArg constructors are not supported for now.
 
-In this case you have an itemdatabase resource, that refers to item resources. You can check the example
-[here](src/it/resources/data/common/item_db.tres).
-
-To create a JVM ItemDB instance from [item_db.tres](src/it/resources/data/common/item_db.tres) call static
+### Deserialization
+To create a JVM ItemDB instance from [item_db.tres](src/it/resources/data/common/item_db.tres) call the static
 `fromGodotResource` method, like this:
 
 - Kotlin :
@@ -117,19 +95,10 @@ val itemDB = fromGodotResource<ItemDB>(file, resPathReplacement)
 ResourceDeserializerKt.fromGodotResource(ItemDB.class, file, resPathReplacement);
 ```
 
-The difference between those method is that the kotlin's one is inlined with reified parameter, which cannot be called
-from Java code. The content of the method is copied at compile time, so that compiler get rid of type parameter.
-
-## TODO
-
-This project is a work in progress. Feel free to fork us and propose pull request !
-
-Here are a bunch of features we plan to add:
-
-- Internal resources support
-- Serialization from JVM
-- AllArgs constructor deserialization
+## Contribution
+Contributions are very welcome!
 
 
 
-[kotlin-approval]: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKBdfk60YSF47gE7XfiN7h9raTwhQsdbcF1PMxk3VG2pl3QyydiA
+## Credits
+We thank Bob Nystrom for his book [crafting interpreters](https://craftinginterpreters.com/), which has inspired our code.

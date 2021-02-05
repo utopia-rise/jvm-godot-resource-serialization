@@ -1,0 +1,35 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://RoundLogic/GameManager.cs" type="Script" id=1]
+[ext_resource path="res://Ui/Intro/Intro.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Ui/Menu/MainMenu/MainMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Ui/Menu/EndMenu/WonEndMenu.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Ui/Menu/EndMenu/LostEndMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Levels/MainLevel/Level.tscn" type="PackedScene" id=6]
+[ext_resource path="res://SoundEngine/SoundEngine.tscn" type="PackedScene" id=7]
+[ext_resource path="res://RoundLogic/GameState.cs" type="Script" id=8]
+
+[node name="Game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+levelContainerNodePath = NodePath("LevelContainer")
+menuContainerNodePath = NodePath("MenuContainer")
+introPackedScene = ExtResource( 2 )
+mainMenuPackedScene = ExtResource( 3 )
+wonMenuPackedScene = ExtResource( 4 )
+lostEndMenuPackedScene = ExtResource( 5 )
+levelPackedScene = ExtResource( 6 )
+
+[node name="LevelContainer" type="Node2D" parent="."]
+
+[node name="MenuContainer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="SoundEngine" parent="." instance=ExtResource( 7 )]
+
+[node name="GameState" type="Node2D" parent="." groups=[
+"gameState",
+]]
+script = ExtResource( 8 )

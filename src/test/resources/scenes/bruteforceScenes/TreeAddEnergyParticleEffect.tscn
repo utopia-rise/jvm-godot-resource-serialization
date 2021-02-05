@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Effects/BuffParticleEffectMaterial.tres" type="Material" id=1]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Assets/ic_plus_green.svg" type="Texture" id=2]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Effects/TreeAddEnergyParticleEffect.cs" type="Script" id=3]
+[ext_resource path="res://Levels/Common/TileMapObjects/TreeObject/Assets/ic_plus_red.svg" type="Texture" id=4]
+
+[node name="TreeAddEnergyParticleeffect" type="Particles2D"]
+local_coords = false
+process_material = ExtResource( 1 )
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+playerTexture = ExtResource( 2 )
+demonTexture = ExtResource( 4 )

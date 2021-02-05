@@ -1,0 +1,120 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://material/SpeakerGlow.tres" type="Material" id=1]
+[ext_resource path="res://scene/Speaker.gd" type="Script" id=2]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="BoxShape" id=3]
+
+[sub_resource type="CylinderMesh" id=4]
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 0.384314, 0.384314, 0.384314, 1 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+lifetime_randomness = 0.11
+direction = Vector3( 0, 1, 0 )
+spread = 17.43
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 0.85
+tangential_accel = 77.58
+tangential_accel_random = 0.2
+scale = 0.01
+scale_random = 0.27
+hue_variation = 0.41
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 0, 0, 0, 1 )
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SphereMesh" id=8]
+material = SubResource( 7 )
+
+[sub_resource type="BoxShape" id=9]
+extents = Vector3( 1.54334, 1, 3.29806 )
+
+[node name="Speaker" type="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1.80221, 0, 0, 0, 1, 0, 1.793, 0 )
+script = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 3 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="."]
+transform = Transform( 0.5, 0, -4.44089e-16, 0, -2.18557e-08, -0.278856, 0, 0.5, -1.21892e-08, 0.0356488, 0.467794, 0.609734 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="GlowSmall" type="MeshInstance" parent="."]
+transform = Transform( 0.554622, 0, 0, 0, -2.18557e-08, -0.30932, 0, 0.5, -1.35208e-08, 0.0356488, 0.467794, 0.56281 )
+mesh = SubResource( 4 )
+material/0 = ExtResource( 1 )
+
+[node name="OmniLight" type="SpotLight" parent="GlowSmall"]
+transform = Transform( 1.80303, 0, 0, 0, 0.118624, -1.99648, 0, 1.7907, 0.106397, 0, -2.768, 0 )
+light_color = Color( 0.501961, 0.0666667, 0.560784, 1 )
+light_energy = 8.0
+spot_range = 3.39496
+spot_angle = 22.1703
+
+[node name="Particles" type="Particles" parent="GlowSmall"]
+transform = Transform( 1.32514, 0, 0, 0, 1.28908, -3.90799e-14, 0, -7.81597e-14, 1.32514, 0, 0, 0 )
+emitting = false
+amount = 34
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.69
+visibility_aabb = AABB( -4, -15.9703, -8.65285, 8, 31.9406, 17.3057 )
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 8 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="."]
+transform = Transform( 0.644539, 0, 4.44089e-16, 0, -2.81737e-08, -0.359467, 0, 0.644539, -1.57128e-08, 0.0356493, -0.36097, 0.496025 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="GlowBig" type="MeshInstance" parent="."]
+transform = Transform( 0.734955, 0, 0, 0, -2.81737e-08, -0.409893, 0, 0.644539, -1.7917e-08, 0.0356493, -0.36097, 0.422432 )
+mesh = SubResource( 4 )
+material/0 = ExtResource( 1 )
+
+[node name="OmniLight" type="SpotLight" parent="GlowBig"]
+transform = Transform( 1.36063, 0, 0, 0, 0.0920222, -1.54876, 0, 1.35132, 0.0802909, 0, -1.85217, -0.0474786 )
+light_color = Color( 0.501961, 0.0666667, 0.560784, 1 )
+light_energy = 8.0
+spot_range = 10.6251
+spot_angle = 26.1506
+
+[node name="Particles2" type="Particles" parent="GlowBig"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, -0.141053, -3.8147e-06 )
+emitting = false
+amount = 34
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.69
+visibility_aabb = AABB( -4, -15.9703, -8.65285, 8, 31.9406, 17.3057 )
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 8 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Area" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.33673 )
+shape = SubResource( 9 )
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]

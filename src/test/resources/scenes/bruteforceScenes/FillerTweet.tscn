@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Ui/TwitterUi/Dynamic/FillerTweet.cs" type="Script" id=1]
+
+[node name="FillerTweet" type="Control"]
+margin_top = 340.0
+margin_right = 250.0
+margin_bottom = 340.0
+script = ExtResource( 1 )
