@@ -1,3 +1,5 @@
+import org.ajoberstar.grgit.Commit
+
 repositories {
     mavenCentral()
 }
