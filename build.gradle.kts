@@ -11,7 +11,7 @@ plugins {
     id("com.utopia-rise.maven-central-publish")
 }
 
-val baseVersion = "0.0.1"
+val baseVersion = "0.1.0"
 
 val currentCommit: Commit = grgit.head()
 // check if the current commit is tagged
