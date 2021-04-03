@@ -9,6 +9,19 @@ plugins {
     id("com.utopia-rise.maven-central-publish")
 }
 
+val baseVersion = "0.0.1"
+
+val currentCommit: Commit = grgit.head()
+// check if the current commit is tagged
+var tagOnCurrentCommit = grgit.tag.list().firstOrNull { tag -> tag.commit.id == currentCommit.id }
+var releaseMode = tagOnCurrentCommit != null
+
+version = if (!releaseMode) {
+    "$baseVersion-${currentCommit.abbreviatedId}-SNAPSHOT"
+} else {
+    requireNotNull(tagOnCurrentCommit).name
+}
+
 dependencies {
     testImplementation("junit:junit:4.12")
 }
