@@ -68,6 +68,9 @@ class PublishToMavenCentralPlugin: Plugin<Project> {
                             artifact(sourceJar.get())
 
                             pom {
+                                name.set("jvm-godot-resource-serialization")
+                                description.set("Godot resource data model serialization api for JVM")
+
                                 url.set("https://github.com/utopia-rise/jvm-godot-resource-serialization.git")
 
                                 scm {
