@@ -1,0 +1,22 @@
+name: Check PR
+on: [pull_request]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        include:
+          - os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Build
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: build
+      - name: Tests
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: test
