@@ -6,7 +6,7 @@ on:
       - '\d+.\d+.\d+'
 
 jobs:
-  build-godot-library:
+  publish:
     strategy:
       matrix:
         os: [ ubuntu-latest ]

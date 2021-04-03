@@ -2,7 +2,7 @@ name: Check PR
 on: [pull_request]
 
 jobs:
-  build-godot-library:
+  build-and-test:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
